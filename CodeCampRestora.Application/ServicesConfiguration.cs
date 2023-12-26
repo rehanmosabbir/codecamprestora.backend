@@ -1,4 +1,5 @@
 using System.Reflection;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CodeCampRestora.Application;
@@ -13,6 +14,8 @@ public static class ServicesConfiguration
             cfg.Lifetime = ServiceLifetime.Scoped;
             cfg.RegisterServicesFromAssembly(currentExecutingAssembly);
         });
+
+        services.AddValidatorsFromAssembly(currentExecutingAssembly);
 
         return services;
     }
