@@ -4,7 +4,6 @@ using CodeCampRestora.Application.Features.Demo.Queries.GetDemo;
 
 namespace CodeCampRestora.Api.Controllers.V1;
 
-[Route("/api/v1/[controller]")]
 public class DemoController : ApiBaseController
 {
     [HttpGet("GetDemo")]
