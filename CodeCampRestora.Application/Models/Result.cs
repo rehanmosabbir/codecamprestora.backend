@@ -33,11 +33,6 @@ public interface IResult<T> : IResult
     T Data { get; }
 }
 
-public interface IResult<T, D>: IResult
-{
-    string B {get;}
-}
-
 public class Result<T> : Result, IResult<T>
 {
     public T Data { get; }

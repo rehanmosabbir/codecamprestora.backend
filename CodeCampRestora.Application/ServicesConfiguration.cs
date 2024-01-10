@@ -11,7 +11,7 @@ public static class ServicesConfiguration
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         var currentExecutingAssembly = Assembly.GetExecutingAssembly();
-        
+
         services.AddMediatR(cfg =>
         {
             cfg.Lifetime = ServiceLifetime.Scoped;
@@ -59,9 +59,9 @@ public static class ServicesConfiguration
     private static ServiceLifetime GetLifeTimeFrom(Type attributeType)
     {
         var propertyNameToDetermineLifetime = "LifeTime";
-        var property = attributeType.GetProperty(propertyNameToDetermineLifetime)
+        var property = attributeType.GetProperty(propertyNameToDetermineLifetime, BindingFlags.Public | BindingFlags.Static)
             ?? throw new NullReferenceException($"{propertyNameToDetermineLifetime} is not specified.");
-        var lifetime = (ServiceLifetime) property.GetValue(propertyNameToDetermineLifetime)!;
+        var lifetime = (ServiceLifetime) property.GetValue(null)!;
 
         return lifetime;
     }
