@@ -4,6 +4,7 @@ using CodeCampRestora.Application.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 using CodeCampRestora.Application.Common.Behaviors;
 
+
 namespace CodeCampRestora.Application;
 
 public static class ServicesConfiguration
@@ -25,6 +26,8 @@ public static class ServicesConfiguration
             .AddServices(typeof(ScopedLifetimeAttribute))
             .AddServices(typeof(TransientLifeTimeAttribute))
             .AddServices(typeof(SingletonLifeTimeAttribute));
+
+        MapsterConfig.AddMapsterConfig();
 
         return services;
     }

@@ -1,12 +1,10 @@
 using System.Text.Json;
 using CodeCampRestora.Domain.Entities;
 using CodeCampRestora.Application.Models;
-using CodeCampRestora.Application.Attributes;
 using CodeCampRestora.Application.Common.Interfaces.Services;
 
 namespace CodeCampRestora.Application.Services;
 
-[ScopedLifetime]
 public class ImageFileSink : IImageSink
 {
     private string _directoryPath;
@@ -23,8 +21,8 @@ public class ImageFileSink : IImageSink
 
     private void CreateDirectoryIfDoesntExist()
     {
-       var directory = new DirectoryInfo(_directoryPath);
-       if(!directory.Exists) directory.Create();
+        var directory = new DirectoryInfo(_directoryPath);
+        if (!directory.Exists) directory.Create();
     }
 
     public async Task<IResult> DeleteAsync(Guid id)

@@ -21,7 +21,6 @@ public static class ServicesConfiguration
         });
 
         services.AddScoped<IImageSink>(provider => new ImageFileSink(@"../Images"));
-
         return services;
     }
 }

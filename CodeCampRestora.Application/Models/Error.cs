@@ -11,3 +11,8 @@ public record ImageErrors
     public static Error NotFound => new("Image.NotFound", "The image doesn't exist.");
     public static Error Exists => new("Image.Exists", "The image already exist.");
 }
+
+public record RestaurantErrors
+{
+    public static Error NotFound => new("Restaurant.NotFound", "Restaurant not found");
+}
