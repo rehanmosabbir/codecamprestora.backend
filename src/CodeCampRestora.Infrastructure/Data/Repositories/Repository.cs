@@ -76,7 +76,7 @@ public abstract class Repository<TEntity, TKey> :
     public async Task<PagedList<TEntity?>> GetPaginatedAsync(int PageNumber, int PageSize)
     {
         var Entities = _dbSet.AsQueryable();
-        var PagedList = await PagedList<TEntity>.ToPagedListAsync(Entities, PageNumber, PageSize);
+        var PagedList = await PagedList<TEntity?>.ToPagedListAsync(Entities, PageNumber, PageSize);
         return PagedList;
     }
 }

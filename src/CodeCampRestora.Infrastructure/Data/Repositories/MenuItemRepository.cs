@@ -24,7 +24,7 @@ public class MenuItemRepository : Repository<MenuItem,Guid>, IMenuItemRepository
 
     public async Task<List<MenuItem>> GetAllByIdAsync(Guid Id)
     {
-        var Entities = _menuItem.Where(e => e.BranchId == Id).ToList();
+        var Entities =await _menuItem.Where(e => e.BranchId == Id).ToListAsync();
         return Entities;
     }
 
