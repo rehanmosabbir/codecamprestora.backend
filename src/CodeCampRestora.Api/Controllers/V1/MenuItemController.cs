@@ -6,7 +6,6 @@ using CodeCampRestora.Application.Features.MenuItems.Queries;
 using CodeCampRestora.Application.Features.MenuItems.Queries.GetAllMenuItems;
 using CodeCampRestora.Application.Features.MenuItems.Queries.GetPaginatedMenuItems;
 using CodeCampRestora.Application.Models;
-using CodeCampRestora.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

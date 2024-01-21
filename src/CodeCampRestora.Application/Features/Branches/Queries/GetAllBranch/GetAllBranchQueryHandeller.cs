@@ -3,6 +3,7 @@ using CodeCampRestora.Application.Common.Interfaces.MediatRs;
 using CodeCampRestora.Application.Common.Interfaces.Repositories;
 using CodeCampRestora.Application.DTOs;
 using CodeCampRestora.Application.Models;
+using CodeCampRestora.Domain.Entities.Branches;
 using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -32,9 +33,9 @@ public class GetAllBranchQueryHandeller : IQueryHandler<GetAllBranchesQuery, IRe
                 BranchErrors.NotFound);
         }
 
-        var branchListDtos = restaurant.Branches.Select(branch =>
-            branch.Adapt<BranchListDTO>()).ToList();
+        var result = await _uniOfWork.Branches.GetBranchesByRestaurant(restaurant,"Address,CuisineTypes,OpeningClosingTimes",request.PageNumber, request.PageSize);
+        var branchListDto = result.Adapt<List<BranchListDTO>>();
 
-        return Result<List<BranchListDTO>>.Success(branchListDtos);
+        return Result<List<BranchListDTO>>.Success(branchListDto);
     }
 }

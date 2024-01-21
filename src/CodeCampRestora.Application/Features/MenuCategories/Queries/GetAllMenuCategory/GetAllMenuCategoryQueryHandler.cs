@@ -6,14 +6,14 @@ using CodeCampRestora.Application.Models;
 
 namespace CodeCampRestora.Application.Features.MenuCategories.Queries.GetAllMenuCategory
 {
-    public class GetAllMenuCategoryQueryHandler : IQueryHandler<Commands.GetAllMenuCategory.GetAllHomeMenuCategory, IResult<List<MenuCategoryDto>>>
+    public class GetAllMenuCategoryQueryHandler : IQueryHandler<GetAllMenuCategoryQuery, IResult<List<MenuCategoryDto>>>
     {
         private readonly IMenuCategoryService _menuCategoryService;
         public GetAllMenuCategoryQueryHandler(IMenuCategoryService menuCategoryService)
         {
             _menuCategoryService = menuCategoryService;
         }
-        public Task<IResult<List<MenuCategoryDto>>> Handle(Commands.GetAllMenuCategory.GetAllHomeMenuCategory request, CancellationToken cancellationToken)
+        public Task<IResult<List<MenuCategoryDto>>> Handle(GetAllMenuCategoryQuery request, CancellationToken cancellationToken)
         {
             var result = _menuCategoryService.GetAllMenuCategoryAsync(request.Id);
             return result;

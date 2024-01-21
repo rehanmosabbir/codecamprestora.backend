@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CodeCampRestora.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initialDb : Migration
+    public partial class addedMenusTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,6 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     DisplayOrder = table.Column<int>(type: "integer", nullable: false),
-                    ImageId = table.Column<Guid>(type: "uuid", nullable: false),
                     RestaurantId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),

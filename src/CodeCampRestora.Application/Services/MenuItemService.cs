@@ -22,19 +22,21 @@ public class MenuItemService : IMenuItemService
     }
     public async Task<IResult<Guid>> CreateItemAsync(CreateMenuItemCommand menuItemDto)
     {
-        var imageEO = menuItemDto.Image.Adapt<Image>();
-        var result = await _imageService.UploadImageAsync(imageEO);
+        // var imageEO = menuItemDto.Image.Adapt<Image>();
+        // var result = await _imageService.UploadImageAsync(imageEO);
 
         var menuItem = menuItemDto.Adapt<MenuItem>();
+        await _unitOfWork.MenuItem.AddAsync(menuItem);
+        await _unitOfWork.SaveChangesAsync();
 
-        if(result.IsSuccess)
-        {
-            var imageId = result.Data;
+        // if(result.IsSuccess)
+        // {
+        //     var imageId = result.Data;
             
-            menuItem.ImageId = imageId;
-            await _unitOfWork.MenuItem.AddAsync(menuItem);
-            await _unitOfWork.SaveChangesAsync();
-        }
+        //     menuItem.ImageId = imageId;
+        //     await _unitOfWork.MenuItem.AddAsync(menuItem);
+        //     await _unitOfWork.SaveChangesAsync();
+        // }
         return Result<Guid>.Success(menuItem.Id);
     }
 
@@ -73,7 +75,11 @@ public class MenuItemService : IMenuItemService
         Guid Id, int pageNumber, int pageSize
     )
     {
-        var menuItemsEO = await _unitOfWork.MenuItem.GetPaginatedByIdAsync(Id, pageNumber, pageSize);
+        var menuItemsEO = await _unitOfWork.MenuItem.GetPaginatedByIdAsync(
+            Id,
+            pageNumber, 
+            pageSize
+        );
         var menuItemsDto = menuItemsEO.Adapt<List<MenuItemDto>>();
         var response = new PaginationDto<MenuItemDto>(menuItemsDto, menuItemsEO.TotalCount, menuItemsEO.TotalPages);
         return Result<PaginationDto<MenuItemDto>>.Success(response);

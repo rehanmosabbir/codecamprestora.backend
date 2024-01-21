@@ -6,5 +6,5 @@ namespace CodeCampRestora.Application.Features.RestaurantCQ.Commands.CreateResta
 public record CreateRestaurantCommand : ICommand<IResult>
 {
     public string Name { get; set; } = default!;
-    public Guid ImageId { get; set; } = default!;
+    public string ImagePath { get; set; } = default!;
 }

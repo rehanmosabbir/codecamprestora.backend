@@ -1,7 +1,7 @@
 ﻿using CodeCampRestora.Application.Common;
 using FluentValidation;
 
-namespace CodeCampRestora.Application.Features.Reviews.Commands.HiddenReview;
+namespace CodeCampRestora.Application.Features.Reviews.Commands.IsReviewHidden;
 
 public class HiddenReviewCommandValidator : ApplicationValidator<HiddenReviewCommand>
 {

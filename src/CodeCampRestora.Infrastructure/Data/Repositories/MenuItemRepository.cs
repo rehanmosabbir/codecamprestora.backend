@@ -33,7 +33,14 @@ public class MenuItemRepository : Repository<MenuItem,Guid>, IMenuItemRepository
     )
     {
         var Entities = _menuItem.Where(e => e.BranchId == Id);
-        var PagedList = await PagedList<MenuItem>.ToPagedListAsync(Entities, pageNumber, pageSize);
+
+        var PagedList = await PagedList<MenuItem>.ToPagedListAsync(
+            Entities, 
+            pageNumber, 
+            pageSize,
+            query => query.OrderBy(MenuItem => MenuItem.DisplayOrder)
+        );
+        
         return PagedList;
     }
 

@@ -21,4 +21,8 @@
     <ProjectReference Include="..\CodeCampRestora.Application\CodeCampRestora.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
+  </ItemGroup>
+
 </Project>

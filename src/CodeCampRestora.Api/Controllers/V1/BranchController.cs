@@ -12,11 +12,12 @@ using CodeCampRestora.Application.Models;
 
 namespace CodeCampRestora.Api.Controllers.V1;
 
+[Route("api/v1/branch")]
 public class BranchController : ApiBaseController
 {
     private readonly ILogger<BranchController> _logger;
     private readonly IMediator _mediator;
-
+    
     public BranchController(ILogger<BranchController> logger, IMediator mediator)
     {
         _logger = logger;
@@ -27,13 +28,13 @@ public class BranchController : ApiBaseController
     [SwaggerOperation(
         Summary = "Get all branches for a restaurant",
         Description = @"Sample Request:
-        Get: api/v1/Branches/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
+        GetAll: api/v1/branch/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
     )]
     [SwaggerResponse(StatusCodes.Status200OK, "Request Success", typeof(IResult))]
     [SwaggerResponse(StatusCodes.Status404NotFound, "Branch not found", typeof(IResult))]
-    public async Task<IResult> GetAll(Guid resturantId)
+    public async Task<IResult> GetAll(Guid resturantId,int pageNumber, int pageSize)
     {
-        var result = await Sender.Send(new GetAllBranchesQuery(resturantId));
+        var result = await Sender.Send(new GetAllBranchesQuery(resturantId, pageNumber,pageSize));
         return result;
     }
 
@@ -41,7 +42,7 @@ public class BranchController : ApiBaseController
     [SwaggerOperation(
         Summary = "Get a branch by ID",
         Description = @"Sample Request:
-        Get: api/v1/Branches/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
+        Get: api/v1/branch/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
     )]
     public async Task<IResult<BranchDTO>> Get(Guid id)
     {
@@ -53,7 +54,7 @@ public class BranchController : ApiBaseController
     [SwaggerOperation(
         Summary = "Create a new branch",
         Description = @"Sample Request:
-        Get: api/v1/Branches/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
+        Post: api/v1/branch/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
     )]
     public async Task<IResult> Post([FromBody] CreateBranchCommand newItem)
     {
@@ -65,7 +66,7 @@ public class BranchController : ApiBaseController
     [SwaggerOperation(
         Summary = "Update an existing branch",
         Description = @"Sample Request:
-        Get: api/v1/Branches/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
+        Put: api/v1/branch/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
     )]
     public async Task<IResult> Put(UpdateBranchCommand updatedItem)
     {
@@ -77,7 +78,7 @@ public class BranchController : ApiBaseController
     [SwaggerOperation(
         Summary = "Delete a branch",
         Description = @"Sample Request:
-        Get: api/v1/Branches/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
+        Delete: api/v1/branch/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
     )]
     public async Task<IResult> Delete(Guid id)
     {

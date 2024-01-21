@@ -17,35 +17,178 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.14")
+                .HasAnnotation("ProductVersion", "7.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Image", b =>
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Branches.Address", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Base64")
+                    b.Property<string>("AreaDetails")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Name")
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Type")
+                    b.Property<string>("District")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Division")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Thana")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Images", (string)null);
+                    b.HasIndex("BranchId")
+                        .IsUnique();
+
+                    b.ToTable("Address", (string)null);
+                });
+
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Branches.Branch", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("PriceRange")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("RestaurantId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RestaurantId");
+
+                    b.ToTable("Branches", (string)null);
+                });
+
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Branches.CuisineType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CuisineTag")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.ToTable("CuisineType", (string)null);
+                });
+
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Branches.OpeningClosingTime", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uuid");
+
+                    b.Property<TimeOnly>("ClosingHours")
+                        .HasColumnType("time without time zone");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Day")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsClosed")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<TimeOnly>("OpeningHours")
+                        .HasColumnType("time without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.ToTable("OpeningClosingTime", (string)null);
                 });
 
             modelBuilder.Entity("CodeCampRestora.Domain.Entities.MenuCategory", b =>
@@ -63,9 +206,6 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
 
                     b.Property<int>("DisplayOrder")
                         .HasColumnType("integer");
-
-                    b.Property<Guid>("ImageId")
-                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp with time zone");
@@ -85,7 +225,7 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("MenuCategories");
+                    b.ToTable("MenuCategories", (string)null);
                 });
 
             modelBuilder.Entity("CodeCampRestora.Domain.Entities.MenuItem", b =>
@@ -142,7 +282,87 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("MenuItems");
+                    b.ToTable("MenuItems", (string)null);
+                });
+
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Review", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsReviewHidden")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<double>("Rating")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Reviews", (string)null);
+                });
+
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.ReviewComments", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CommentText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsCommentHidden")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReviewId");
+
+                    b.ToTable("ReviewComments", (string)null);
                 });
 
             modelBuilder.Entity("CodeCampRestora.Infrastructure.Entities.Category", b =>
@@ -185,9 +405,6 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
@@ -195,8 +412,9 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("ImageId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp with time zone");
@@ -212,6 +430,44 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Restaurants", (string)null);
+                });
+
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Branches.Address", b =>
+                {
+                    b.HasOne("CodeCampRestora.Domain.Entities.Branches.Branch", "Branch")
+                        .WithOne("Address")
+                        .HasForeignKey("CodeCampRestora.Domain.Entities.Branches.Address", "BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+                });
+
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Branches.Branch", b =>
+                {
+                    b.HasOne("CodeCampRestora.Infrastructure.Entities.Restaurant", null)
+                        .WithMany("Branches")
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Branches.CuisineType", b =>
+                {
+                    b.HasOne("CodeCampRestora.Domain.Entities.Branches.Branch", null)
+                        .WithMany("CuisineTypes")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Branches.OpeningClosingTime", b =>
+                {
+                    b.HasOne("CodeCampRestora.Domain.Entities.Branches.Branch", null)
+                        .WithMany("OpeningClosingTimes")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CodeCampRestora.Domain.Entities.MenuCategory", b =>
@@ -236,6 +492,17 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.ReviewComments", b =>
+                {
+                    b.HasOne("CodeCampRestora.Domain.Entities.Review", "Review")
+                        .WithMany("ReviewComments")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Review");
+                });
+
             modelBuilder.Entity("CodeCampRestora.Infrastructure.Entities.Category", b =>
                 {
                     b.HasOne("CodeCampRestora.Infrastructure.Entities.Restaurant", "Restaurant")
@@ -247,8 +514,24 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                     b.Navigation("Restaurant");
                 });
 
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Branches.Branch", b =>
+                {
+                    b.Navigation("Address");
+
+                    b.Navigation("CuisineTypes");
+
+                    b.Navigation("OpeningClosingTimes");
+                });
+
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Review", b =>
+                {
+                    b.Navigation("ReviewComments");
+                });
+
             modelBuilder.Entity("CodeCampRestora.Infrastructure.Entities.Restaurant", b =>
                 {
+                    b.Navigation("Branches");
+
                     b.Navigation("Categories");
                 });
 #pragma warning restore 612, 618

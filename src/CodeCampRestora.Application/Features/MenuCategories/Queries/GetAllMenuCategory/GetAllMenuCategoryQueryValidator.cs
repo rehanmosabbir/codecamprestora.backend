@@ -5,7 +5,7 @@ using FluentValidation;
 
 namespace CodeCampRestora.Application.Features.MenuCategories.Queries.GetAllMenuCategory;
 
-public class GetAllMenuCategoryQueryValidator : ApplicationValidator<Commands.GetAllMenuCategory.GetAllHomeMenuCategory>
+public class GetAllMenuCategoryQueryValidator : ApplicationValidator<GetAllMenuCategoryQuery>
 {
     public GetAllMenuCategoryQueryValidator()
     {

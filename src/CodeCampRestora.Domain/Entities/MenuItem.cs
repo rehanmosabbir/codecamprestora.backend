@@ -8,7 +8,7 @@ namespace CodeCampRestora.Domain.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public string Ingredients { get; set; }
-        public Guid ImageId { get; set; }
+        public string ImagePath { get; set; }
         public double Price { get; set; }
         public int? DisplayOrder { get; set; }
         public bool Availability { get; set; }

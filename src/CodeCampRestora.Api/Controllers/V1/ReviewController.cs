@@ -1,6 +1,6 @@
 ﻿using CodeCampRestora.Application.DTOs;
 using CodeCampRestora.Application.Features.Reviews.Commands.CreateReview;
-using CodeCampRestora.Application.Features.Reviews.Commands.HiddenReview;
+using CodeCampRestora.Application.Features.Reviews.Commands.IsReviewHidden;
 using CodeCampRestora.Application.Features.Reviews.Queries.GetAllReview;
 using CodeCampRestora.Application.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +11,7 @@ namespace CodeCampRestora.Api.Controllers.V1;
 [Route("api/v1/[controller]")]
 [ApiController]
 public class ReviewController : ApiBaseController
-{
+{   
     [HttpGet]
     [SwaggerOperation(
         Summary = "Getting All Reviews",
@@ -40,12 +40,12 @@ public class ReviewController : ApiBaseController
     [SwaggerOperation(
         Summary = "Hide or Show a Review",
         Description = @"Sample Request:
-            Patch: api/v1/Review
+            Patch: api/v1/IsReviewHidden
             {
              ""hideReview"": true
             }"
     )]
-    public async Task<Application.Models.IResult> HiddenReview([FromBody]  HiddenReviewCommand hiddenReviewCommand)
+    public async Task<Application.Models.IResult> IsReviewHiddenUpdate([FromBody]  HiddenReviewCommand hiddenReviewCommand)
     {
         var result = await Sender.Send(hiddenReviewCommand);
         return result;

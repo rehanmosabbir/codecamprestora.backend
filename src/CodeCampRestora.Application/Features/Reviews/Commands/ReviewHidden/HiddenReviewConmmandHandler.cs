@@ -6,7 +6,7 @@ using CodeCampRestora.Application.Models;
 using Mapster;
 using MediatR;
 
-namespace CodeCampRestora.Application.Features.Reviews.Commands.HiddenReview;
+namespace CodeCampRestora.Application.Features.Reviews.Commands.IsReviewHidden;
 
 public class HiddenReviewConmmandHandler : ICommandHandler<HiddenReviewCommand, IResult>
 {
@@ -20,13 +20,13 @@ public class HiddenReviewConmmandHandler : ICommandHandler<HiddenReviewCommand, 
     {
         var review = await _unitOfWork.Reviews.GetByIdAsync(request.Id);
 
-        if(review == null)
+        if (review == null)
         {
             throw new ResourceNotFoundException("No review found");
         }
 
-        review.HideReview = request.HideReview;
-        await _unitOfWork.Reviews.UpdateAsync(request.Id,review);  
+        review.IsReviewHidden = request.IsReviewHidden;
+        await _unitOfWork.Reviews.UpdateAsync(request.Id, review);
         await _unitOfWork.SaveChangesAsync();
 
         var reviewOrderDto = review.Adapt<ReviewDTO>();

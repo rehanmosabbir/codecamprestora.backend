@@ -2,11 +2,9 @@
 {
     public class ReviewDTO
     {
-        public  string? Description { set; get; }
-        public  double Rating { set; get; }
+        public string? Description { set; get; }
+        public double Rating { set; get; }
         public Guid OrderId { set; get; }
-        public Guid BranchId {  set; get; }
-        public bool HideReview { get; set; }
-        
+        public bool IsReviewHidden { get; set; }
     }
 }
