@@ -1,37 +1,42 @@
-﻿using MediatR;
+﻿using Mapster;
 using CodeCampRestora.Application.DTOs;
-using CodeCampRestora.Domain.Entities.Branches;
-using System.Globalization;
-using CodeCampRestora.Application.Common.Interfaces.Repositories;
-using CodeCampRestora.Application.Common.Interfaces.MediatRs;
 using CodeCampRestora.Application.Models;
-using Mapster;
+using CodeCampRestora.Domain.Entities.Branches;
+using CodeCampRestora.Application.Common.Interfaces.MediatRs;
 using CodeCampRestora.Application.Common.Interfaces.Services;
+using CodeCampRestora.Application.Common.Interfaces.Repositories;
+using Microsoft.AspNetCore.Http;
+using System.Net;
 
 namespace CodeCampRestora.Application.Features.Branches.Commands.CreateBranch;
 
-public class  CreateBranchCommandHandler : ICommandHandler<CreateBranchCommand, IResult<BranchDTO>>
+public class CreateBranchCommandHandler : ICommandHandler<CreateBranchCommand, IResult<BranchDTO>>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IDateTimeService _dateTimeService;
-    public CreateBranchCommandHandler(IUnitOfWork unitOfWork,IDateTimeService dateTimeService)
+
+    public CreateBranchCommandHandler(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
-        _dateTimeService = dateTimeService;
-            
     }
 
     public async Task<IResult<BranchDTO>> Handle(CreateBranchCommand request, CancellationToken cancellationToken)
     {
-        var branch = request.Adapt<Branch>();
+        try
+        {
+            var branch = request.Adapt<Branch>();
 
-        await _unitOfWork.Branches.AddAsync(branch);
-        await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.Branches.AddAsync(branch);
+            await _unitOfWork.SaveChangesAsync();
 
-        var branchDTO = branch.Adapt<BranchDTO>();
-      return Result<BranchDTO>.Success(branchDTO);
+            var branchDTO = branch.Adapt<BranchDTO>();
+            return Result<BranchDTO>.Success(branchDTO);
+        }
+        catch(FormatException ex) 
+        {
+            return Result<BranchDTO>.Failure(
+               StatusCodes.Status404NotFound,
+               DateTimeErrors.InvalidTimeFormate);
+        }
 
     }
-
-   
 }

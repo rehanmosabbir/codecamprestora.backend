@@ -1,11 +1,13 @@
-using CodeCampRestora.Application.DTOs;
-using CodeCampRestora.Application.Features.MenuCategories.Commands.DeleteMenuCategory;
-using CodeCampRestora.Application.Features.MenuCategories.Queries;
-using CodeCampRestora.Application.Features.MenuItems.Commands.CreateMenuCategory;
-using IResult =  CodeCampRestora.Application.Models.IResult;
 using Microsoft.AspNetCore.Mvc;
+using CodeCampRestora.Domain.Entities;
+using CodeCampRestora.Application.DTOs;
 using Swashbuckle.AspNetCore.Annotations;
 using CodeCampRestora.Application.Models;
+using CodeCampRestora.Application.Features.MenuCategories.Queries;
+using CodeCampRestora.Application.Features.MenuItems.Commands.CreateMenuCategory;
+using CodeCampRestora.Application.Features.MenuCategories.Commands.DeleteMenuCategory;
+using CodeCampRestora.Application.Features.MenuCategories.Commands.GetAllMenuCategory;
+using CodeCampRestora.Application.Features.MenuCategories.Queries.GetPaginatedMenuCategory;
 
 namespace CodeCampRestora.Api.Controllers.V1;
 
@@ -33,6 +35,20 @@ public class MenuCategoryController : ApiBaseController
         return result;
     }
 
+    [HttpGet("GetAll{id:Guid}")]
+    [SwaggerOperation(
+        Summary = "Get all menu Categories",
+        Description = @"Sample Request:
+        Get: api/v1/MenuCategory/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
+    )]
+    public async Task<IResult<List<MenuCategoryDto>>> GetAll(
+        [FromRoute, SwaggerParameter(Description = "Get all menu categories by restaurant id", Required = true)]
+        Guid id)
+    {
+        var result = await Sender.Send(new GetAllMenuCategoryQuery(id));
+        return result;
+    }
+
     [HttpDelete("{id:Guid}")]
     [SwaggerOperation(
         Summary = "Delete a menu category",
@@ -44,6 +60,18 @@ public class MenuCategoryController : ApiBaseController
         Guid id)
     {
         var result = await Sender.Send(new DeleteMenuCategoryCommand(id));
+        return result;
+    }
+
+    [HttpGet("Paginated")]
+    [SwaggerOperation(
+        Summary = "Get paginated menu categories",
+        Description = @"Sample Request:
+        Get: api/v1/MenuCategory/Paginated?PageNumber=1&PageSize=10"
+    )]
+    public async Task<IResult<PaginationDto<MenuCategory>>> GetPaginated(int PageNumber, int PageSize)
+    {
+        var result = await Sender.Send(new GetPaginatedMenuCategoriesQuery(PageNumber, PageSize));
         return result;
     }
 }

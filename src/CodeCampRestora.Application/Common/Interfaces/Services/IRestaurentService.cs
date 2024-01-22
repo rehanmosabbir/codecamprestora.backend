@@ -7,7 +7,7 @@ public interface IRestaurentService
 {
     Task<IResult> Create(RestaurantDto restaurantDto);
     Task<IResult> GetAll();
-    Task<IResult> GetById(Guid id); 
+    Task<IResult> GetById(Guid id);
     Task<IResult> Update(Guid id, RestaurantDto restaurantDto);
     Task<IResult> DeleteById(Guid id);
 }

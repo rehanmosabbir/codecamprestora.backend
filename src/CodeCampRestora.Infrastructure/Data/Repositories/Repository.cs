@@ -1,7 +1,7 @@
-﻿using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-﻿using CodeCampRestora.Application.Common.Interfaces.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using CodeCampRestora.Application.Common.Helpers.Pagination;
+using CodeCampRestora.Application.Common.Interfaces.Repositories;
 
 namespace CodeCampRestora.Infrastructure.Data.Repositories;
 
@@ -62,7 +62,7 @@ public abstract class Repository<TEntity, TKey> :
         return doesExist;
     }
 
-    public IQueryable<TEntity> IncludeProps(params Expression<Func<TEntity, object?>>[] navigationProperties)
+    public IQueryable<TEntity> IncludeProps(params Expression<Func<TEntity, object>>[] navigationProperties)
     {
         IQueryable<TEntity> query = _dbSet;
 
@@ -73,10 +73,34 @@ public abstract class Repository<TEntity, TKey> :
 
         return query;
     }
-    public async Task<PagedList<TEntity?>> GetPaginatedAsync(int PageNumber, int PageSize)
+
+
+    public async Task<PagedList<TEntity>?> GetPaginatedAsync(
+        int PageNumber,
+        int PageSize,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null
+    )
     {
-        var Entities = _dbSet.AsQueryable();
-        var PagedList = await PagedList<TEntity>.ToPagedListAsync(Entities, PageNumber, PageSize);
-        return PagedList;
+        var entities = _dbSet.AsQueryable();
+        var pagedList = await PagedList<TEntity>.ToPagedListAsync(entities, PageNumber, PageSize, orderBy);
+        return pagedList;
+    }
+
+    public virtual async Task<IList<TEntity>> Get(
+            string includeProperties = "", int pageIndex = 1, int pageSize = 10)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        var total = await query.CountAsync();
+        var totalDisplay = total;
+
+        foreach (var includeProperty in includeProperties.Split
+            (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            query = query.Include(includeProperty);
+        }
+        var result = query.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+
+        return result.ToList();
+        
     }
 }

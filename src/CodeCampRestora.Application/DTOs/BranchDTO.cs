@@ -27,9 +27,9 @@ public class BranchCuisineTypeDTO
 
 public class BranchOpeningClosingTimeDTO
 {
-    public DayOfWeek DayOfWeek { get; set; }
-    public string Opening { get; set; } = default!;
-    public string Closing { get; set; } = default!;
+    public DayOfWeek Day { get; set; }
+    public string OpeningHours { get; set; } = default!;
+    public string ClosingHours { get; set; } = default!;
     public bool IsClosed { get; set; }
 }
 

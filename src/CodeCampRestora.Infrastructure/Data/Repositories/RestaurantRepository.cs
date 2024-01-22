@@ -10,7 +10,7 @@ namespace CodeCampRestora.Infrastructure.Data.Repositories;
 [ScopedLifetime]
 public class RestaurantRepository : Repository<Restaurant, Guid>, IRestaurantRepository
 {
-    public RestaurantRepository(IApplicationDbContext applicationDbContext) 
+    public RestaurantRepository(IApplicationDbContext applicationDbContext)
         : base((DbContext)applicationDbContext)
     {
     }

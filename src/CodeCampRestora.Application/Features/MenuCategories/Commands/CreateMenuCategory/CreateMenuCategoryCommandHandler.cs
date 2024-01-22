@@ -2,7 +2,6 @@ using CodeCampRestora.Application.Common.Interfaces.MediatRs;
 using CodeCampRestora.Application.Common.Interfaces.Services;
 using CodeCampRestora.Application.Features.MenuItems.Commands.CreateMenuCategory;
 using CodeCampRestora.Application.Models;
-using Mapster;
 
 namespace CodeCampRestora.Application.Features.MenuCategory.Commands;
 
@@ -15,8 +14,7 @@ public class CreateMenuCategoryCommandHandler : ICommandHandler<CreateMenuCatego
     }
     public async Task<IResult<Guid>> Handle(CreateMenuCategoryCommand request, CancellationToken cancellationToken)
     {
-        var MenuCategories = request.Adapt<CodeCampRestora.Domain.Entities.MenuCategory>();
-        var result = await _menuCategoryService.CreateCategoryAsync(MenuCategories);
+        var result = await _menuCategoryService.CreateCategoryAsync(request);
         return result;
     }
 }

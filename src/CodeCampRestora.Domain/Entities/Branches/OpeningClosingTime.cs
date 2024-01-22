@@ -1,14 +1,12 @@
-﻿ 
- 
+﻿using CodeCampRestora.Domain.Entities.Common;
+
 namespace CodeCampRestora.Domain.Entities.Branches;
- 
-public class OpeningClosingTime
+
+public class OpeningClosingTime:AuditableEntity<Guid>
 {
-    public Guid Id { get; set; }
-    public DayOfWeek DayOfWeek { get; set; }
-    public TimeOnly Opening { get; set; }
-    public TimeOnly Closing { get; set; }
+    public DayOfWeek Day { get; set; }
+    public TimeOnly OpeningHours { get; set; }
+    public TimeOnly ClosingHours { get; set; }
     public bool IsClosed { get; set; }
     public Guid BranchId { get; set; }
-    
 }

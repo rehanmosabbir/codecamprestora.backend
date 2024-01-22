@@ -9,6 +9,8 @@ namespace CodeCampRestora.Application.Features.MenuCategories.Commands.CreateMen
     {
         public CreateMenuCategoryCommandValidator()
         {
+            RuleFor(item => item.Name).NotEmpty().WithMessage("Name is required.");
+            RuleFor(item => item.Image).NotNull().WithMessage("Image can not be null!");
             RuleFor(item => item.RestaurantId).NotNull().WithMessage("RestaurantId can not be null!");
         }
     }

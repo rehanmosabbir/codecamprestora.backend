@@ -18,8 +18,8 @@ public class CreateImageCommandHandler : ICommandHandler<CreateImageCommand, IRe
     public async Task<IResult<Guid>> Handle(CreateImageCommand request, CancellationToken cancellationToken)
     {
         var imageEO = request.Adapt<Image>();
-
         var result = await _imageService.UploadImageAsync(imageEO);
+
         return result;
     }
 }

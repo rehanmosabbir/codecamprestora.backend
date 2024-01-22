@@ -1,4 +1,5 @@
 using CodeCampRestora.Application.Common.Interfaces.MediatRs;
+using CodeCampRestora.Application.DTOs;
 using CodeCampRestora.Application.Models;
 
 namespace CodeCampRestora.Application.Features.MenuItems.Commands.CreateMenuItem
@@ -9,6 +10,7 @@ namespace CodeCampRestora.Application.Features.MenuItems.Commands.CreateMenuItem
         string Ingredients, 
         double? Price,
         bool Availability,
+        ImageRequestDto Image,
         int DisplayOrder, 
         Guid? CategoryId,
         Guid? BranchId 

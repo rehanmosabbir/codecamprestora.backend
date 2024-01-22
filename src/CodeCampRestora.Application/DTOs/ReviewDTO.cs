@@ -1,12 +1,10 @@
-﻿namespace CodeCampRestora.Application.DTOs
+﻿namespace CodeCampRestora.Application.DTOs;
+
+public class ReviewDTO
 {
-    public class ReviewDTO
-    {
-        public  string? Description { set; get; }
-        public  double Rating { set; get; }
-        public Guid OrderId { set; get; }
-        public Guid BranchId {  set; get; }
-        public bool IsHideReview { get; set; }
-        
-    }
+    public string? Description { set; get; }
+    public double Rating { set; get; }
+    public bool IsReviewHidden { get; set; }
+
+
 }

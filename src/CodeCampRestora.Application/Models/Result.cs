@@ -53,3 +53,74 @@ public class Result<T> : Result, IResult<T>
     public new static Result<T> Failure(params Error[] errors) => new(StatusCodes.Status400BadRequest, default!, errors);
     public new static Result<T> Failure(int statusCode, params Error[] errors) => new(statusCode, default!, errors);
 }
+
+public interface IAuthResult : IResult
+{
+    string AccessToken { get; }
+    string RefreshToken { get; }
+    DateTime ExpiresIn { get; }
+    string UserId { get; }
+    public IEnumerable<string> Roles { get; }
+}
+
+public class AuthResult : Result, IAuthResult
+{
+    public string AccessToken { get; }
+    public string RefreshToken { get; }
+    public DateTime ExpiresIn { get; }
+    public string UserId { get; }
+    public IEnumerable<string> Roles { get; }
+
+    protected AuthResult(int statusCode, Error[] errors, string accessToken, string refreshToken, DateTime expiresIn,
+         string userId, IEnumerable<string> roles) : base(statusCode, errors)
+    {
+        AccessToken = accessToken;
+        RefreshToken = refreshToken;
+        ExpiresIn = expiresIn;
+        UserId = userId;
+        Roles = roles;
+    }
+
+    protected AuthResult(int statusCode, Error[] errors) : this(statusCode, errors, string.Empty,
+         string.Empty, DateTime.UtcNow, string.Empty, new List<string>())
+    {
+
+    }
+
+    public static AuthResult Success(string accessToken, string refreshToken, DateTime
+        expiresIn, string userId, IEnumerable<string> roles) =>
+        new(StatusCodes.Status200OK, Array.Empty<Error>(), accessToken, refreshToken, expiresIn, userId, roles);
+
+    public new static AuthResult Failure(params Error[] errors) => new(StatusCodes.Status400BadRequest, errors);
+    public new static AuthResult Failure(int statusCode, params Error[] errors) => new(statusCode, errors);
+}
+
+public interface IAuthOwnerResult : IAuthResult
+{
+    string RestaurantId { get; }
+}
+
+public class AuthOwnerResult : AuthResult, IAuthOwnerResult
+{
+    public string RestaurantId { get; }
+
+    private AuthOwnerResult(int statusCode, Error[] errors, string accessToken, string refreshToken,
+        DateTime expiresIn, string userId, string restaurantId, IEnumerable<string> roles)
+        : base(statusCode, errors, accessToken, refreshToken, expiresIn, userId, roles)
+    {
+        RestaurantId = restaurantId;
+    }
+
+    private AuthOwnerResult(int statusCode, Error[] errors) : this(statusCode, errors, string.Empty,
+         string.Empty, DateTime.UtcNow, string.Empty, string.Empty, new List<string>())
+    {
+
+    }
+
+    public static AuthOwnerResult Success(string accessToken, string refreshToken, DateTime
+        expiresIn, string userId, string restaurantId, IEnumerable<string> roles) =>
+        new(StatusCodes.Status200OK, Array.Empty<Error>(), accessToken, refreshToken, expiresIn, userId, restaurantId, roles);
+
+    public new static AuthOwnerResult Failure(params Error[] errors) => new(StatusCodes.Status400BadRequest, errors);
+    public new static AuthOwnerResult Failure(int statusCode, params Error[] errors) => new(statusCode, errors);
+}

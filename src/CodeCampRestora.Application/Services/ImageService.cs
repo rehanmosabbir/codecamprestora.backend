@@ -37,7 +37,7 @@ public class ImageService : IImageService
 
         if(!doesExist) return Result<bool>.Failure(
             StatusCodes.Status404NotFound,
-            Error.NotFound("Image don't exist"));
+            ImageErrors.NotFound);
 
         return Result<bool>.Success(true);
     }
@@ -48,7 +48,7 @@ public class ImageService : IImageService
 
         if (!IsImageExist(imageEO)) return Result<ImageDTO>.Failure(
             StatusCodes.Status404NotFound,
-            Error.NotFound("Image not found"));
+            ImageErrors.NotFound);
 
         var imageDTO = imageEO.Adapt<ImageDTO>();
 
@@ -61,7 +61,7 @@ public class ImageService : IImageService
 
         if(!IsImageExist(imageEO)) return Result.Failure(
             StatusCodes.Status404NotFound,
-            Error.NotFound("Image not found"));
+            ImageErrors.NotFound);
 
         imageEO!.IsDeleted = true;
         await _unitOfWork.SaveChangesAsync();
