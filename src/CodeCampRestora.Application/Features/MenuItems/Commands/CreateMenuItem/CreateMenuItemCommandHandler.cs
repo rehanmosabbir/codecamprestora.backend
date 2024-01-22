@@ -17,7 +17,7 @@ namespace CodeCampRestora.Application.Features.MenuItems.Commands.CreateMenuItem
         public async Task<IResult<Guid>> Handle(CreateMenuItemCommand request, CancellationToken cancellationToken)
         {
             var MenuItems = request.Adapt<MenuItem>();
-            var result = await _menuItemService.CreateItemAsync(request);
+            var result = await _menuItemService.CreateItemAsync(MenuItems);
             return result;
         }
     }

@@ -4,5 +4,5 @@ using CodeCampRestora.Application.Models;
 
 namespace CodeCampRestora.Application.Features.MenuCategories.Commands.GetAllMenuCategory
 {
-    public record GetAllMenuCategoryQuery(Guid Id) : IQuery<IResult<List<MenuCategoryDto>>>;
+    public record GetAllMenuCategoryQuery : IQuery<IResult<List<MenuItemDto>>>;
 }

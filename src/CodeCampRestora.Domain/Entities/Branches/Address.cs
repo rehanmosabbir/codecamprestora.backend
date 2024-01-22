@@ -1,10 +1,9 @@
-﻿
-using CodeCampRestora.Domain.Entities.Common;
-
+﻿ 
 namespace CodeCampRestora.Domain.Entities.Branches;
 
-public class Address: AuditableEntity<Guid>
+public class Address  
 {
+    public Guid Id { get; set; } = default!;
     public double Latitude { get; set; }
     public double Longitude { get; set; }
 

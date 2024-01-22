@@ -2,16 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 using CodeCampRestora.Application.DTOs;
 using Swashbuckle.AspNetCore.Annotations;
-using CodeCampRestora.Application.Models;
+using IResult = CodeCampRestora.Application.Models.IResult;
 using CodeCampRestora.Application.Features.Branches.Queries.GetById;
 using CodeCampRestora.Application.Features.Branches.Commands.CreateBranch;
 using CodeCampRestora.Application.Features.Branches.Commands.DeleteBranch;
 using CodeCampRestora.Application.Features.Branches.Commands.UpdateBranch;
 using CodeCampRestora.Application.Features.Branches.Queries.GetAllBranch;
+using CodeCampRestora.Application.Models;
 
 namespace CodeCampRestora.Api.Controllers.V1;
 
-[Route("api/v1/branch")]
 public class BranchController : ApiBaseController
 {
     private readonly ILogger<BranchController> _logger;
@@ -27,13 +27,13 @@ public class BranchController : ApiBaseController
     [SwaggerOperation(
         Summary = "Get all branches for a restaurant",
         Description = @"Sample Request:
-        GetAll: api/v1/branch/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
+        Get: api/v1/Branches/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
     )]
     [SwaggerResponse(StatusCodes.Status200OK, "Request Success", typeof(IResult))]
     [SwaggerResponse(StatusCodes.Status404NotFound, "Branch not found", typeof(IResult))]
-    public async Task<IResult> GetAll(Guid resturantId,int pageNumber, int pageSize)
+    public async Task<IResult> GetAll(Guid resturantId)
     {
-        var result = await Sender.Send(new GetAllBranchesQuery(resturantId, pageNumber,pageSize));
+        var result = await Sender.Send(new GetAllBranchesQuery(resturantId));
         return result;
     }
 
@@ -41,7 +41,7 @@ public class BranchController : ApiBaseController
     [SwaggerOperation(
         Summary = "Get a branch by ID",
         Description = @"Sample Request:
-        Get: api/v1/branch/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
+        Get: api/v1/Branches/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
     )]
     public async Task<IResult<BranchDTO>> Get(Guid id)
     {
@@ -53,7 +53,7 @@ public class BranchController : ApiBaseController
     [SwaggerOperation(
         Summary = "Create a new branch",
         Description = @"Sample Request:
-        Post: api/v1/branch/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
+        Get: api/v1/Branches/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
     )]
     public async Task<IResult> Post([FromBody] CreateBranchCommand newItem)
     {
@@ -65,7 +65,7 @@ public class BranchController : ApiBaseController
     [SwaggerOperation(
         Summary = "Update an existing branch",
         Description = @"Sample Request:
-        Put: api/v1/branch/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
+        Get: api/v1/Branches/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
     )]
     public async Task<IResult> Put(UpdateBranchCommand updatedItem)
     {
@@ -77,7 +77,7 @@ public class BranchController : ApiBaseController
     [SwaggerOperation(
         Summary = "Delete a branch",
         Description = @"Sample Request:
-        Delete: api/v1/branch/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
+        Get: api/v1/Branches/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
     )]
     public async Task<IResult> Delete(Guid id)
     {

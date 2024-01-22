@@ -8,11 +8,9 @@ namespace CodeCampRestora.Infrastructure.Data.UnitOfWorks;
 public class UnitOfWork : IUnitOfWork
 {
     public IImageRepository Images { get; }
-    public IOrderRepository Orders { get; }
     public IRestaurantRepository Restaurants { get; }
     public IBranchRepository Branches { get; }
     public IMenuItemRepository MenuItem { get; }
-    public IReviewCommentRepository Comments { get; }
     public IMenuCategoryRepository MenuCategory { get; }
     public IReviewRepository Reviews { get; }
 
@@ -20,22 +18,18 @@ public class UnitOfWork : IUnitOfWork
 
     public UnitOfWork(
         IImageRepository images,
-        IOrderRepository orders,
         IBranchRepository branches,
-        IMenuItemRepository menuItem,
         IRestaurantRepository restaurants,
+        IMenuItemRepository menuItem,
         IMenuCategoryRepository menuCategory,
-        IReviewCommentRepository reviewComment,
         IReviewRepository review,
         IApplicationDbContext applicationDbContext)
     {
         _appplicationDbContext = applicationDbContext;
         Images = images;
-        Orders = orders;
         Branches = branches;
-        MenuItem = menuItem;
-        Comments = reviewComment;
         Restaurants = restaurants;
+        MenuItem = menuItem;
         MenuCategory = menuCategory;
         Reviews = review;
     }

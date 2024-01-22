@@ -7,7 +7,6 @@ namespace CodeCampRestora.Domain.Entities
     {
         public string Name { get; set; }
         public int DisplayOrder { get; set; }
-        public string ImagePath { get; set; }
         public Guid RestaurantId { get; set; }
         public Restaurant? Restaurant { get; set; }
     }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using IResult = CodeCampRestora.Application.Models.IResult;
 using CodeCampRestora.Application.Features.Images.Commands.DeleteImage;
 using CodeCampRestora.Application.Features.Images.Commands.CreateImage;
 using CodeCampRestora.Application.Features.Images.Queries.GetAnImageById;

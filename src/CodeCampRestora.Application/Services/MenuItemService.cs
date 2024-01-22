@@ -7,38 +7,20 @@ using IResult = CodeCampRestora.Application.Models.IResult;
 using CodeCampRestora.Domain.Entities;
 using Mapster;
 using Microsoft.AspNetCore.Http;
-using CodeCampRestora.Application.Features.MenuItems.Commands.CreateMenuItem;
 
 namespace CodeCampRestora.Application.Services;
 [ScopedLifetime]
 public class MenuItemService : IMenuItemService
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IImageService _imageService;
-    public MenuItemService(IUnitOfWork unitOfWork, IImageService imageService)
+    public MenuItemService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
-        _imageService = imageService;
     }
-    public async Task<IResult<Guid>> CreateItemAsync(CreateMenuItemCommand menuItemDto)
+    public async Task<IResult<Guid>> CreateItemAsync(MenuItem menuItem)
     {
-        // var imageEO = menuItemDto.Image.Adapt<Image>();
-        // var result = await _imageService.UploadImageAsync(imageEO);
-
-        var menuItem = menuItemDto.Adapt<MenuItem>();
-        menuItem.ImagePath = menuItemDto.Image.Name;
-        
         await _unitOfWork.MenuItem.AddAsync(menuItem);
         await _unitOfWork.SaveChangesAsync();
-
-        // if(result.IsSuccess)
-        // {
-        //     var imageId = result.Data;
-            
-        //     menuItem.ImageId = imageId;
-        //     await _unitOfWork.MenuItem.AddAsync(menuItem);
-        //     await _unitOfWork.SaveChangesAsync();
-        // }
         return Result<Guid>.Success(menuItem.Id);
     }
 
@@ -53,13 +35,6 @@ public class MenuItemService : IMenuItemService
         return Result.Success(200);
     }
 
-    public async Task<IResult<List<MenuItemDto>>> GetAllMenuItemsAsync(Guid id)
-    {
-        var MenuItemsEO = await _unitOfWork.MenuItem.GetAllByIdAsync(id);
-        var MenuItemsDto = MenuItemsEO.Adapt<List<MenuItemDto>>();
-        return Result<List<MenuItemDto>>.Success(MenuItemsDto);
-    }
-
     public async Task<IResult<MenuItemDto>> GetMenuItemByIdAsync(Guid Id)
     {
         var MenuItem = await _unitOfWork.MenuItem.GetByIdAsync(Id);
@@ -71,30 +46,5 @@ public class MenuItemService : IMenuItemService
         }
         var menuItemDto = MenuItem.Adapt<MenuItemDto>();
         return Result<MenuItemDto>.Success(menuItemDto);
-    }
-
-    public async Task<IResult<PaginationDto<MenuItemDto>>> GetPaginatedAsync(
-        Guid Id, int pageNumber, int pageSize
-    )
-    {
-        var menuItemsEO = await _unitOfWork.MenuItem.GetPaginatedByIdAsync(
-            Id,
-            pageNumber, 
-            pageSize
-        );
-        var menuItemsDto = menuItemsEO.Adapt<List<MenuItemDto>>();
-        var response = new PaginationDto<MenuItemDto>(menuItemsDto, menuItemsEO.TotalCount, menuItemsEO.TotalPages);
-        return Result<PaginationDto<MenuItemDto>>.Success(response);
-    }
-
-    public async Task<IResult> UpdateMenuItemDisplayOrderAsync(List<MenuItemDto> menuItems)
-    {
-        var menuItemsEO = menuItems.Adapt<List<MenuItem>>();
-        var result = await _unitOfWork.MenuItem.UpdateMenuItemsAsync(menuItemsEO);
-        if (result.IsSuccess)
-        {
-            await _unitOfWork.SaveChangesAsync();
-        }
-        return result;
     }
 }
