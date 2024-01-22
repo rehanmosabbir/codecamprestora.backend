@@ -18,4 +18,8 @@
     <ProjectReference Include="..\CodeCampRestora.Domain\CodeCampRestora.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\MobileMenuCategories\Command\" />
+  </ItemGroup>
+
 </Project>
