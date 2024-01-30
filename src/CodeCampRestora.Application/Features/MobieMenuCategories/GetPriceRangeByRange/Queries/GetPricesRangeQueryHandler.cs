@@ -1,11 +1,12 @@
 ﻿using CodeCampRestora.Application.Common.Interfaces.MediatRs;
 using CodeCampRestora.Application.Common.Interfaces.Repositories;
 using CodeCampRestora.Application.DTOs;
+using CodeCampRestora.Application.Features.Reviews.Queries.GetReviewById;
 using CodeCampRestora.Application.Models;
 using Mapster;
-using Microsoft.EntityFrameworkCore;
 
 namespace CodeCampRestora.Application.Features.MobieMenuCategories.Queries;
+
 public class GetPricesRangeQueryHandler : IQueryHandler<GetPricesRangeQuery, IResult<List<BranchListDTO>>>
 {
     private readonly IUnitOfWork _uniOfWork;
