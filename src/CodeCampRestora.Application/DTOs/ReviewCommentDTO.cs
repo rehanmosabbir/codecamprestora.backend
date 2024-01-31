@@ -1,7 +1,6 @@
-﻿namespace CodeCampRestora.Application.DTOs
+﻿namespace CodeCampRestora.Application.DTOs;
+
+public class ReviewCommentDTO
 {
-    public class ReviewCommentDTO
-    {
-        public string CommentText { get; set; } = default!;
-    }
+    public string CommentText { get; set; } = default!;
 }
