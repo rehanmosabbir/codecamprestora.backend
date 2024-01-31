@@ -2,7 +2,6 @@ using CodeCampRestora.Application.Attributes;
 using CodeCampRestora.Application.Common.Interfaces.Repositories;
 using CodeCampRestora.Application.Common.Interfaces.Services;
 using CodeCampRestora.Application.DTOs;
-using CodeCampRestora.Application.Features.MenuCategories.Commands.UpdateMenuCategory;
 using CodeCampRestora.Application.Features.MenuItems.Commands.CreateMenuCategory;
 using CodeCampRestora.Application.Models;
 using CodeCampRestora.Domain.Entities;
@@ -22,16 +21,23 @@ public class MenuCategoryService : IMenuCategoryService
     }
     public async Task<IResult<Guid>> CreateCategoryAsync(CreateMenuCategoryCommand menuCategoryDto)
     {
-        var menuCategory = menuCategoryDto.Adapt<MenuCategory>();
-        
-        var uploadedImage = await _imageService.UploadImageAsync(menuCategoryDto.Image);
+        // var imageEO = menuCategoryDto.Image.Adapt<Image>();
+        // var result = await _imageService.UploadImageAsync(imageEO);
 
-        if(uploadedImage.IsSuccess)
-        {
-            menuCategory.ImagePath = uploadedImage.Data;
-            await _unitOfWork.MenuCategory.AddAsync(menuCategory);
-            await _unitOfWork.SaveChangesAsync();
-        }
+        var menuCategory = menuCategoryDto.Adapt<MenuCategory>();
+        menuCategory.ImagePath = menuCategoryDto.Image.Name;
+        
+        await _unitOfWork.MenuCategory.AddAsync(menuCategory);
+        await _unitOfWork.SaveChangesAsync();
+
+        // if(result.IsSuccess)
+        // {
+        //     var imageId = result.Data;
+            
+        //     menuCategory.ImageId = imageId;
+        //     await _unitOfWork.MenuCategory.AddAsync(menuCategory);
+        //     await _unitOfWork.SaveChangesAsync();
+        // }
 
         return Result<Guid>.Success(menuCategory.Id);
     }
@@ -49,7 +55,7 @@ public class MenuCategoryService : IMenuCategoryService
         return Result.Success();
     }
 
-    public async Task<IResult<List<MenuCategoryDto>>> GetAllMobileMenuCategoryAsync()
+    public async Task<IResult<List<MenuCategoryDto>>> GetAllHomeMenuCategoryAsync()
     {
         var MenuCategories = await _unitOfWork.MenuCategory.GetAllAsync();
         var MenuCategoriesDto = MenuCategories.Adapt<List<MenuCategoryDto>>();
@@ -76,53 +82,16 @@ public class MenuCategoryService : IMenuCategoryService
         return Result<MenuCategoryDto>.Success(menuCategoryDto);
     }
 
-    public async Task<IResult<PaginationDto<MenuCategoryDto>>> GetPaginatedMenuCategoryAsync(
-        Guid restaurantId, int pageNumber, int pageSize
-    )
+    public Task<IResult<PaginationDto<MenuCategory>>> GetPaginatedMenuCategoryAsync(int pageNumber, int pageSize)
     {
-        var menuCategoriesEO = await _unitOfWork.MenuCategory.GetPaginatedByIdAsync(
-            restaurantId,
-            pageNumber, 
-            pageSize
-        );
-        var menuCategoriesDto = menuCategoriesEO.Adapt<List<MenuCategoryDto>>();
-        foreach ( var menuCategory in menuCategoriesEO)
-        {
-            var imagePath = await _imageService.GetImageByFilePathAsync(menuCategory.ImagePath);
-            menuCategory.ImagePath = imagePath.Data;
-        }
-        var response = new PaginationDto<MenuCategoryDto>(menuCategoriesDto, menuCategoriesEO.TotalCount, menuCategoriesEO.TotalPages);
-        return Result<PaginationDto<MenuCategoryDto>>.Success(response);
+        throw new NotImplementedException();
     }
 
-    public async Task<Models.IResult> UpdateMenuCategoryAsync(UpdateMenuCategoryCommand request)
-    {
-        var menuCategoriesEO = await _unitOfWork.MenuCategory.GetByIdAsync(request.Id);
+    // public async Task<IResult<PaginationDto<MenuCategory>>> GetPaginatedMenuCategoryAsync(int pageNumber, int pageSize)
+    // {
+    //     var menuCategoriesEO = await _unitOfWork.MenuCategory.GetPaginatedAsync(pageNumber, pageSize);
+    //     var response= new PaginationDto<MenuCategory>(menuCategoriesEO, menuCategoriesEO.TotalCount, menuCategoriesEO.TotalPages);
+    //     return Result<PaginationDto<MenuCategory>>.Success(response);
+    // }
 
-        if (menuCategoriesEO == null)
-        {
-            return Result.Failure(
-                StatusCodes.Status404NotFound,
-                Error.NotFound($"Menu Category not found with Id {request.Id}"));
-        }
-
-        var menuCategory = request.Adapt<MenuCategory>();
-        menuCategory.ImagePath = "string";
-
-        await _unitOfWork.MenuCategory.UpdateAsync(request.Id, menuCategory);
-        await _unitOfWork.SaveChangesAsync();
-
-        return Result.Success(StatusCodes.Status204NoContent);
-    }
-
-    public async Task<Models.IResult> UpdateMenuCategoryDisplayOrderAsync(List<MenuCategoryDto> menuCategories)
-    {
-        var menuCategoriesEO = menuCategories.Adapt<List<MenuCategory>>();
-        var result = await _unitOfWork.MenuCategory.UpdateMenuCategoryAsync(menuCategoriesEO);
-        if (result.IsSuccess)
-        {
-            await _unitOfWork.SaveChangesAsync();
-        }
-        return result;
-    }
 }

@@ -6,7 +6,6 @@ using CodeCampRestora.Application.Models;
 using CodeCampRestora.Application.Common.Interfaces.Services;
 using CodeCampRestora.Application.Common.Interfaces.MediatRs;
 using CodeCampRestora.Application.Common.Interfaces.Repositories;
-using CodeCampRestora.Domain.Entities.Branches;
 
 namespace CodeCampRestora.Application.Features.Branches.Commands.UpdateBranch;
 
@@ -40,14 +39,6 @@ public class UpdateBranchCommandHandler : ICommandHandler<UpdateBranchCommand, I
         }
 
         request.Adapt(branchEO);
-        branchEO.OpeningClosingTimes = request.OpeningClosingTimes!.Select(x => new OpeningClosingTime
-        {
-            Day = x.Day,
-            OpeningHours = _dateTimeService.ConvertToTimeOnly(x.OpeningHours),
-            ClosingHours = _dateTimeService.ConvertToTimeOnly(x.ClosingHours),
-            IsClosed = x.IsClosed
-
-        }).ToList();
         await _unitOfWork.Branches.UpdateAsync(branchEO.Id, branchEO);
         var branchDTO = branchEO.Adapt<BranchDTO>();
 

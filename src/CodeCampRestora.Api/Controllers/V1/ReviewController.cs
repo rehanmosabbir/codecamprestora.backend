@@ -1,7 +1,8 @@
-﻿using CodeCampRestora.Application.Features.Reviews.Commands.CreateReview;
+﻿using CodeCampRestora.Application.DTOs;
+using CodeCampRestora.Application.Features.Reviews.Commands.CreateReview;
 using CodeCampRestora.Application.Features.Reviews.Commands.IsReviewHidden;
 using CodeCampRestora.Application.Features.Reviews.Queries.GetAllReview;
-using CodeCampRestora.Application.Features.Reviews.Queries.GetReviewById;
+using CodeCampRestora.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -10,13 +11,14 @@ namespace CodeCampRestora.Api.Controllers.V1;
 [Route("api/v1/[controller]")]
 [ApiController]
 public class ReviewController : ApiBaseController
-{
+{   
     [HttpGet]
-    public async Task<IActionResult> GetAll(int pageNumber, int pageSize)
+    
+    public async Task<IResult<List<ReviewDTO>>> GetAll(int pageNumber, int pageSize)
     {
-        var request = new GetAllReviewQuery(pageNumber, pageSize);
+        var request = new GetAllReviewQuery(pageNumber,pageSize);
         var response = await Sender.Send(request);
-        return response.ToActionResult();
+        return response;
     }
     [HttpPost]
     [SwaggerOperation(
@@ -30,24 +32,11 @@ public class ReviewController : ApiBaseController
             ""Description"":""Someting""
             }"
     )]
-    public async Task<IActionResult> CreateReviews([FromBody] CreateReviewCommand reviewCommand)
+    public async Task<Application.Models.IResult> CreateReviews([FromBody]CreateReviewCommand reviewCommand)
     {
         var result = await Sender.Send(reviewCommand);
-        return result.ToActionResult();
+        return result;
     }
-    [HttpGet]
-    [Route("{BranchId:Guid}")]
-    [SwaggerOperation(
-        Summary = "Get a review by BranchID",
-        Description = @"Sample Request:
-        Get: api/v1/branch/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
-    )]
-    public async Task<IActionResult> Get(Guid BranchId, int pageNumber, int pageSize)
-    {
-        var result = await Sender.Send(new GetReviewByIdQuery(BranchId, pageNumber,pageSize));
-        return result.ToActionResult();
-    }
-
     [HttpPatch]
     [SwaggerOperation(
         Summary = "Hide or Show a Review",
@@ -57,9 +46,9 @@ public class ReviewController : ApiBaseController
              ""hideReview"": true
             }"
     )]
-    public async Task<IActionResult> IsReviewHiddenUpdate([FromBody] HiddenReviewCommand hiddenReviewCommand)
+    public async Task<Application.Models.IResult> IsReviewHiddenUpdate([FromBody]  HiddenReviewCommand hiddenReviewCommand)
     {
         var result = await Sender.Send(hiddenReviewCommand);
-        return result.ToActionResult();
+        return result;
     }
 }

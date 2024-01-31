@@ -10,7 +10,7 @@ namespace CodeCampRestora.Application.Features.MenuItems.Commands.CreateMenuItem
         string Ingredients, 
         double? Price,
         bool Availability,
-        ImageDTO Image,
+        ImageRequestDto Image,
         int DisplayOrder, 
         Guid? CategoryId,
         Guid? BranchId 

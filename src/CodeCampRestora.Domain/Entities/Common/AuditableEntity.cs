@@ -1,6 +1,6 @@
 namespace CodeCampRestora.Domain.Entities.Common;
 
-public class AuditableEntity<TKey> : IAuditableEntity
+public class AuditableEntity<TKey>
 {
     public TKey Id { get; set; } = default!;
     public string CreatedBy { get; set; } = string.Empty;

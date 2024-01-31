@@ -20,12 +20,12 @@ public class ImagesController : ApiBaseController
         }"
     )]
     [SwaggerResponse(StatusCodes.Status200OK, "Request Success", typeof(IResult))]
-    public async Task<IActionResult> Post(
+    public async Task<IResult> Post(
         [FromBody, SwaggerRequestBody(Description = "image payload", Required = true)]
         CreateImageCommand command)
     {
         var result = await Sender.Send(command);
-        return result.ToActionResult();
+        return result;
     }
 
     [HttpGet("{id:Guid}")]
@@ -36,12 +36,12 @@ public class ImagesController : ApiBaseController
     )]
     [SwaggerResponse(StatusCodes.Status200OK, "Request Success", typeof(IResult))]
     [SwaggerResponse(StatusCodes.Status404NotFound, "Image not found", typeof(IResult))]
-    public async Task<IActionResult> Get(
+    public async Task<IResult> Get(
         [FromRoute, SwaggerParameter(Description = "Get image by id", Required = true)]
         Guid id)
     {
         var result = await Sender.Send(new GetAnImageByIdQuery(id));
-        return result.ToActionResult();
+        return result;
     }
 
     [HttpDelete("{id:Guid}")]
@@ -52,11 +52,11 @@ public class ImagesController : ApiBaseController
     )]
     [SwaggerResponse(StatusCodes.Status200OK, "Request Success", typeof(IResult))]
     [SwaggerResponse(StatusCodes.Status404NotFound, "Image not found", typeof(IResult))]
-    public async Task<IActionResult> Delete(
+    public async Task<IResult> Delete(
         [FromRoute, SwaggerParameter(Description = "Delete by id", Required = true)]
         Guid id)
     {
         var result = await Sender.Send(new DeleteImageCommand(id));
-        return result.ToActionResult();
+        return result;
     }
 }

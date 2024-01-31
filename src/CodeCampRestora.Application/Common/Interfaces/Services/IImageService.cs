@@ -6,9 +6,8 @@ namespace CodeCampRestora.Application.Common.Interfaces.Services;
 
 public interface IImageService
 {
-    Task<IResult<List<string>>> UploadMultipleImagesAsync(List<ImageDTO> images);
-    Task<IResult<string>> UploadImageAsync(ImageDTO image);
-    Task<IResult<string>> GetImageByFilePathAsync(string filePath);
-    Task<IResult<List<string>>> GetAllImagesAsync(List<string> filePaths);
-    Task<IResult> DeleteImageAsync(string filePath);
+    Task<IResult<Guid>> UploadImageAsync(Image image);
+    Task<IResult<ImageDTO>> GetImageByIdAsync(Guid id);
+    Task<IResult> DeleteImageByIdAsync(Guid id);
+    Task<IResult<bool>> IsImageExist(Guid id);
 }

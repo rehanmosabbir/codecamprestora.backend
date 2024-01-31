@@ -1,7 +1,6 @@
 ﻿using CodeCampRestora.Application.Common.Interfaces.MediatRs;
 using CodeCampRestora.Application.Common.Interfaces.Repositories;
 using CodeCampRestora.Application.DTOs;
-using CodeCampRestora.Application.Features.Reviews.Queries.GetReviewById;
 using CodeCampRestora.Application.Models;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
@@ -18,14 +17,9 @@ namespace CodeCampRestora.Application.Features.Orders.Queries.GetAllOrder
         }
         public async Task<IResult<List<OrderDTO>>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
         {
-            var orders = await _unitOfWork.Orders.GetOrdersByBranchId(request.BranchId,"OrderItems", request.PageNumber, request.PageSize);
+            var orders = await _unitOfWork.Orders.Get("OrderItems",request.PageNumber, request.PageSize);
             var bookingOrdersDto = orders.Adapt<List<OrderDTO>>();
             return Result<List<OrderDTO>>.Success(bookingOrdersDto);
-        }
-
-        public Task<IResult<List<ReviewDTO>>> Handle(GetReviewByIdQuery request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
     }
 }

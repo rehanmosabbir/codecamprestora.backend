@@ -94,9 +94,6 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("text");
-
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp with time zone");
 
@@ -552,7 +549,11 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
 

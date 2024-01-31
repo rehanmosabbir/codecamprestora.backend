@@ -2,7 +2,7 @@
 
 public interface IDateTimeService
 {
-    public DateTime Now { get; }
+    DateTime Now { get; }
     public TimeOnly ConvertToTimeOnly(string timeString);
     public DateTime ConvertToDateOnly(string dateString);
 }

@@ -13,143 +13,59 @@ namespace CodeCampRestora.Application.Services;
 [ScopedLifetime]
 public class ImageService : IImageService
 {
-    
+    private readonly IUnitOfWork _unitOfWork;
 
-    public async Task<IResult<string>> UploadImageAsync(ImageDTO image)
+    public ImageService(IUnitOfWork unitOfWork)
     {
-        byte[] imageData = Convert.FromBase64String(image.Base64Url);
-        await SaveImageData(image, imageData);
-        string relativePath = GetRelativeImagePath(image);
-        return Result<string>.Success(relativePath);
+        _unitOfWork = unitOfWork;
     }
 
-    public async Task<IResult<List<string>>> UploadMultipleImagesAsync(List<ImageDTO> images)
+    public async Task<IResult<Guid>> UploadImageAsync(Image image)
     {
-        var relativePaths = new List<string>();
-        foreach(var image in images)
-        {
-            byte[] imageData = Convert.FromBase64String(image.Base64Url);
-            await SaveImageData(image, imageData);
-            string relativePath = GetRelativeImagePath(image);
-            relativePaths.Add(relativePath);
-        }
-        return Result<List<string>>.Success(relativePaths);
+        await _unitOfWork.Images.AddAsync(image);
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result<Guid>.Success(image.Id);
     }
 
-    public async Task<IResult<List<string>>> GetAllImagesAsync(List<string> filePaths)
+    private bool IsImageExist(Image? image) => image is not null && !image.IsDeleted;
+
+    public async Task<IResult<bool>> IsImageExist(Guid id)
     {
-        var listBase64Url = new List<string>();
-        foreach(var filePath in filePaths)
-        {
-            string imageName = Path.Combine(filePath.Split(Path.DirectorySeparatorChar));
-            string rootImagePath = Path.Combine("wwwroot", imageName);
-            string newImageName = rootImagePath.Replace("\\", "/");
-            string imagesDirectory = "wwwroot/images";
-            string base64Url = "";
+        var doesExist = await _unitOfWork.Images
+            .DoesExist(image => image.Id == id && !image.IsDeleted);
 
-            if (Directory.Exists(imagesDirectory))
-            {
-                string[] imageFiles = Directory.GetFiles(imagesDirectory);
+        if(!doesExist) return Result<bool>.Failure(
+            StatusCodes.Status404NotFound,
+            ImageErrors.NotFound);
 
-                foreach (string imagePath in imageFiles)
-                {
-                    string newImagePath = imagePath.Replace("\\", "/");
-                    if (newImageName == newImagePath)
-                    {
-                        byte[] imageData = await File.ReadAllBytesAsync(imagePath);
-
-
-                        base64Url = Convert.ToBase64String(imageData);
-                        listBase64Url.Add(base64Url);
-                    }
-                }
-            }
-        }
-
-        return Result<List<string>>.Success(listBase64Url);
+        return Result<bool>.Success(true);
     }
 
-    public async Task<IResult<string>> GetImageByFilePathAsync(string filePath)
+    public async Task<IResult<ImageDTO>> GetImageByIdAsync(Guid id)
     {
-        string imageName = Path.Combine(filePath.Split(Path.DirectorySeparatorChar));
-        string rootImagePath = Path.Combine("wwwroot", imageName);
-        string newImageName = rootImagePath.Replace("\\", "/");
-        string imagesDirectory = "wwwroot/images";
-        string base64Url = "";
+        var imageEO = await _unitOfWork.Images.GetByIdAsync(id);
 
-        if (Directory.Exists(imagesDirectory))
-        {
-            string[] imageFiles = Directory.GetFiles(imagesDirectory);
+        if (!IsImageExist(imageEO)) return Result<ImageDTO>.Failure(
+            StatusCodes.Status404NotFound,
+            ImageErrors.NotFound);
 
-            foreach (string imagePath in imageFiles)
-            {
-                string newImagePath = imagePath.Replace("\\", "/");
-                if (newImageName == newImagePath)
-                {
-                    byte[] imageData = await File.ReadAllBytesAsync(imagePath);
+        var imageDTO = imageEO.Adapt<ImageDTO>();
 
-                    
-                    base64Url = Convert.ToBase64String(imageData);
-                }
-            }
-        }
-        
-
-        return Result<string>.Success(base64Url);
+        return Result<ImageDTO>.Success(imageDTO);
     }
 
-    public async Task<IResult> DeleteImageAsync(string filePath)
+    public async Task<IResult> DeleteImageByIdAsync(Guid id)
     {
-        string imageName = Path.Combine(filePath.Split(Path.DirectorySeparatorChar));
-        string rootImagePath = Path.Combine("wwwroot", imageName);
-        string newImageName = rootImagePath.Replace("\\", "/");
+        var imageEO = await _unitOfWork.Images.GetByIdAsync(id);
 
-        if (File.Exists(newImageName))
-        {
-            File.Delete(newImageName);
-            return Result.Success();
-        }
-        else
-        {
-            return Result.Failure(StatusCodes.Status404NotFound,ImageErrors.NotFound);
-        }
-        
+        if(!IsImageExist(imageEO)) return Result.Failure(
+            StatusCodes.Status404NotFound,
+            ImageErrors.NotFound);
+
+        imageEO!.IsDeleted = true;
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result.Success();
     }
-
-    private async Task SaveImageData(ImageDTO image, byte[] imageData)
-    {
-        string uploadDirectory = "wwwroot/images";
-
-        if (!Directory.Exists(uploadDirectory))
-        {
-            Directory.CreateDirectory(uploadDirectory);
-        }
-        image.Size = imageData.Length;
-        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(image.Name);
-        string filePath = Path.Combine(uploadDirectory, $"{image.Id}_{fileNameWithoutExtension}.jpg");
-
-        await File.WriteAllBytesAsync(filePath, imageData);
-    }
-
-    private string GetRelativeImagePath(ImageDTO image)
-    {
-        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(image.Name);
-        string filePath = Path.Combine("images", $"{image.Id}_{fileNameWithoutExtension}.jpg");
-
-        return filePath;
-    }
-
-    private string GetRelativePath(string fullPath)
-    {
-        string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-
-        if (fullPath.StartsWith(rootPath, StringComparison.OrdinalIgnoreCase))
-        {
-            string relativePath = Path.GetRelativePath(rootPath, fullPath);
-            return relativePath.Replace('\\', '/'); // Use forward slashes for consistency
-        }
-
-        return fullPath;
-    }
-
 }

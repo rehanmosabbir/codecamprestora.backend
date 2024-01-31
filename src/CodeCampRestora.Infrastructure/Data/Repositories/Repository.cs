@@ -19,7 +19,7 @@ public abstract class Repository<TEntity, TKey> :
 
     public virtual async Task AddAsync(TEntity entity)
     {
-        await Task.FromResult(_dbSet.Add(entity));
+        await _dbSet.AddAsync(entity);
     }
 
     public async Task DeleteAsync(TKey id)

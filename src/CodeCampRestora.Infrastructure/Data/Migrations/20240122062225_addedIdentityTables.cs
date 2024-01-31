@@ -33,7 +33,8 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FullName = table.Column<string>(type: "text", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: false),
+                    LastName = table.Column<string>(type: "text", nullable: false),
                     StaffId = table.Column<Guid>(type: "uuid", nullable: false),
                     RestaurantId = table.Column<Guid>(type: "uuid", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
