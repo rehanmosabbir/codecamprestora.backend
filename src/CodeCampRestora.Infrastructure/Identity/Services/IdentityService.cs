@@ -35,7 +35,8 @@ public class IdentityService : IIdentityService
             IConfiguration configuration,
             IApplicationUserManagerAdapter applicationUserManager,
             IApplicationRoleManagerAdapter applicationRoleManager,
-            TokenValidationParameters tokenValidationParameters)
+            TokenValidationParameters tokenValidationParameters,
+            IHttpContextAccessor context)
     {
         _dbContext = dbContext;
         _dateTime = dateTimeService;
@@ -52,8 +53,7 @@ public class IdentityService : IIdentityService
 
         var newUser = new ApplicationUser
         {
-            FirstName = registerUserDto.FirstName,
-            LastName = registerUserDto.LastName,
+            FullName = registerUserDto.FullName,
             Email = registerUserDto.Email,
             UserName = registerUserDto.Email,
             RestaurantId = restaurantId
@@ -63,7 +63,6 @@ public class IdentityService : IIdentityService
         if (!result.Succeeded) return Result.Failure(StatusCodes.Status500InternalServerError, AuthErrors.UserCreationFailed);
 
         var createdUser = await _applicationUserManager.FindByEmailAsync(registerUserDto.Email);
-        Console.WriteLine();
         var role = await _applicationRoleManager.FindByNameAsync(UserRoles.Owner.ToString());
 
         if (createdUser is null || role is null)
@@ -91,7 +90,7 @@ public class IdentityService : IIdentityService
         {
             return AuthOwnerResult.Failure(
                 StatusCodes.Status401Unauthorized,
-                AuthErrors.LoginError
+                AuthErrors.LoginFailed
             );
         }
 
@@ -115,8 +114,7 @@ public class IdentityService : IIdentityService
 
         var newuser = new ApplicationUser
         {
-            FirstName = registerMobileUserDTO.FirstName,
-            LastName = registerMobileUserDTO.LastName,
+            FullName = registerMobileUserDTO.FullName,
             Email = registerMobileUserDTO.Email,
             UserName = registerMobileUserDTO.Phone,
             PhoneNumber = registerMobileUserDTO.Phone,
@@ -149,7 +147,7 @@ public class IdentityService : IIdentityService
         var user = await _applicationUserManager.FindByNameAsync(mobileUserLoginDto.Phone);
         if (user is null)
         {
-            return AuthOwnerResult.Failure(
+            return AuthResult.Failure(
                 StatusCodes.Status404NotFound,
                 AuthErrors.UserNotFound
             );
@@ -158,9 +156,9 @@ public class IdentityService : IIdentityService
         var isPasswordVerified = await _applicationUserManager.CheckPasswordAsync(user, mobileUserLoginDto.Password);
         if (!isPasswordVerified)
         {
-            return AuthOwnerResult.Failure(
+            return AuthResult.Failure(
                 StatusCodes.Status401Unauthorized,
-                AuthErrors.LoginError
+                AuthErrors.LoginFailed
             );
         }
 
@@ -215,7 +213,7 @@ public class IdentityService : IIdentityService
             var claims = new List<Claim> {
                 new(ApplicationConstants.RestaurantIdClaim, user.RestaurantId.ToString()!)
             };
-            await GenerateTokenAsync(user, claims);
+            return await GenerateTokenAsync(user, claims);
         }
 
         return await GenerateTokenAsync(user);
@@ -241,7 +239,7 @@ public class IdentityService : IIdentityService
         var securityToken = new TokenBuilder()
             .AddIssuer(_configuration["JWT:ValidIssuer"]!)
             .AddAudience(_configuration["JWT:ValidAudience"]!)
-            .AddExpiry(_dateTime.Now.AddMinutes(2))
+            .AddExpiry(_dateTime.Now.AddMinutes(1))
             .AddNotBefore(_dateTime.Now)
             .AddClaims(authClaims)
             .AddKey(_configuration["JWT:Secret"]!)

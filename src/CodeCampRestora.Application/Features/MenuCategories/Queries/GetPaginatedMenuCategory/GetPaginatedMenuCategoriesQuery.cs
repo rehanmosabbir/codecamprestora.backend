@@ -4,11 +4,13 @@ using CodeCampRestora.Application.Models;
 
 namespace CodeCampRestora.Application.Features.MenuCategories.Queries.GetPaginatedMenuCategory;
 
-public record GetPaginatedMenuCategoriesQuery : IQuery<IResult<PaginationDto<Domain.Entities.MenuCategory>>>{
+public record GetPaginatedMenuCategoriesQuery : IQuery<IResult<PaginationDto<MenuCategoryDto>>>{
+    public Guid RestaurantId { get; set; }
     public int PageNumber { get; set; }
     public int PageSize { get; set ;}
-    public GetPaginatedMenuCategoriesQuery(int pageNumber, int pageSize)
+    public GetPaginatedMenuCategoriesQuery(Guid restauarantId, int pageNumber, int pageSize)
     {
+        RestaurantId = restauarantId;
         PageNumber = pageNumber;
         PageSize = pageSize;
     }

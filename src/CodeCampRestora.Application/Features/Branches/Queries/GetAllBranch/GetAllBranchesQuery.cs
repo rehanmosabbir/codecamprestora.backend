@@ -6,7 +6,7 @@ using CodeCampRestora.Application.Models;
 
 namespace CodeCampRestora.Application.Features.Branches.Queries.GetAllBranch;
 
-public record GetAllBranchesQuery : IQuery<IResult<List<BranchListDTO>>>
+public record GetAllBranchesQuery : IQuery<IResult<PaginationDto<BranchListDTO>>>
 {
     public Guid Id { get; set; }
     public int PageNumber { get; set; }

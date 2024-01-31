@@ -2,6 +2,7 @@
 using CodeCampRestora.Application.Common.Interfaces.Repositories;
 using CodeCampRestora.Application.DTOs;
 using CodeCampRestora.Application.Exceptions;
+using CodeCampRestora.Application.Features.Reviews.Queries.GetReviewById;
 using CodeCampRestora.Application.Models;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,11 @@ namespace CodeCampRestora.Application.Features.Orders.Queries.GetOrderById
             var bookingOrderDto = order.Adapt<OrderDTO>();
             return Result<OrderDTO>.Success(bookingOrderDto);
 
+        }
+
+        public Task<IResult<List<ReviewDTO>>> Handle(GetReviewByIdQuery request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

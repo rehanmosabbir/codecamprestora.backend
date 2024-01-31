@@ -2,9 +2,9 @@ namespace CodeCampRestora.Domain.Enums;
 
 public enum PriceRange
 {
-    Low = 0,
-    Medium = 5,
-    High = 10
+    Low = 1,
+    Medium = 2,
+    High = 3
 }
 
 //public enum DayOfWeek

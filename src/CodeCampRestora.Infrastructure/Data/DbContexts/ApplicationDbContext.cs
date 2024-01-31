@@ -24,10 +24,10 @@ public class ApplicationDbContext
         base.OnModelCreating(builder);
 
         builder.Entity<ApplicationUser>()
-        .HasOne(u => u.Staff)
-        .WithOne(t => t.ApplicationUser)
-        .HasForeignKey<Staff>(b => b.ApplicationUserId)
-        .IsRequired(false);
+            .HasOne(u => u.Staff)
+            .WithOne(t => t.ApplicationUser)
+            .HasForeignKey<Staff>(b => b.ApplicationUserId)
+            .IsRequired(false);
 
         SeedRoles(builder);
     }

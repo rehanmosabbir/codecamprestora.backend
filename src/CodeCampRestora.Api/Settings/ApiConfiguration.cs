@@ -8,6 +8,7 @@ public static class ApiConfiguration
     {
         services.AddControllers();
         services.AddEndpointsApiExplorer();
+        services.AddHttpContextAccessor();
 
         services.AddCors(options =>
         {

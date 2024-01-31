@@ -8,6 +8,8 @@ namespace CodeCampRestora.Application.Features.Orders.Commands.CreateOrder
 {
     public record CreateOrderCommand : ICommand<IResult<OrderDTO>>
     {
+        public Guid BranchId { get; set; }
+        public Guid UserId { get; set; }
         public string CustomerName { get; set; } = default!;
         public string Phone { get; set; } = default!;
         public string Time { get; set; } = default!;

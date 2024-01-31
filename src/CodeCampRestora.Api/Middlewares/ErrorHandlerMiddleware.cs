@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
-using CodeCampRestora.Application.Exceptions;
+using Newtonsoft.Json.Serialization;
 using CodeCampRestora.Application.Models;
+using CodeCampRestora.Application.Exceptions;
 
 
 namespace WebApi.Middlewares
@@ -100,7 +101,9 @@ namespace WebApi.Middlewares
                 Error.NotValidated(message.Type, message.Description)).ToArray();
 
             var response = Result.Failure(errors);
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+            await context.Response.WriteAsync(
+                JsonConvert.SerializeObject(response,
+                new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
         }
     }
 }

@@ -5,6 +5,7 @@ using CodeCampRestora.Application.Common.Interfaces.DbContexts;
 using CodeCampRestora.Application.Common.Interfaces.Repositories;
 using CodeCampRestora.Application.Common.Helpers.Pagination;
 using CodeCampRestora.Infrastructure.Entities;
+using CodeCampRestora.Application.DTOs;
 
 
 namespace CodeCampRestora.Infrastructure.Data.Repositories;
@@ -21,7 +22,7 @@ public class BranchRepository : Repository<Branch, Guid>, IBranchRepository
         _branchDbSet = _dbContext.Set<Branch>();
     }
 
-    public async Task<IList<Branch>> GetBranchesByRestaurant(
+    public async Task<PagedList<Branch>> GetBranchesByRestaurant(
     Restaurant restaurant,
     string includeProperties = "",
     int pageIndex = 1,
@@ -40,11 +41,13 @@ public class BranchRepository : Repository<Branch, Guid>, IBranchRepository
         {
             query = query.Include(includeProperty);
         }
+        var result = await  PagedList<Branch>.ToPagedListAsync(query, pageIndex, pageSize,
+            queryorderby => queryorderby.OrderBy(branch => branch.CreatedBy)
+            );
 
-        var result = query.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+        //var result = query.Skip((pageIndex - 1) * pageSize).Take(pageSize);
 
-
-        var branchList = await result.ToListAsync();
+        var branchList =  result;
         return branchList;
     }
 

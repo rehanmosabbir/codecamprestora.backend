@@ -7,7 +7,7 @@ namespace CodeCampRestora.Application.Features.MenuItems.Commands.CreateMenuCate
     public record CreateMenuCategoryCommand(
         string Name,
         int DisplayOrder,
-        ImageRequestDto? Image,
+        ImageDTO? Image,
         Guid? RestaurantId 
     ) : ICommand<IResult<Guid>>;
 }

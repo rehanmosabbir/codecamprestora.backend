@@ -19,6 +19,7 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     PriceRange = table.Column<int>(type: "integer", nullable: true),
                     IsAvailable = table.Column<bool>(type: "boolean", nullable: false),
+                    ImagePath = table.Column<string>(type: "text", nullable: true),
                     RestaurantId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),

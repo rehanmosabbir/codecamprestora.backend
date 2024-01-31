@@ -2,6 +2,7 @@ using CodeCampRestora.Application.Common.Interfaces.MediatRs;
 using CodeCampRestora.Application.Common.Interfaces.Services;
 using CodeCampRestora.Application.DTOs;
 using CodeCampRestora.Application.Features.MenuCategories.Commands.GetAllMenuCategory;
+using CodeCampRestora.Application.Features.Reviews.Queries.GetReviewById;
 using CodeCampRestora.Application.Models;
 
 namespace CodeCampRestora.Application.Features.MenuCategories.Queries.GetAllMenuCategory
@@ -17,6 +18,11 @@ namespace CodeCampRestora.Application.Features.MenuCategories.Queries.GetAllMenu
         {
             var result = _menuCategoryService.GetAllMenuCategoryAsync(request.Id);
             return result;
+        }
+
+        public Task<IResult<List<ReviewDTO>>> Handle(GetReviewByIdQuery request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

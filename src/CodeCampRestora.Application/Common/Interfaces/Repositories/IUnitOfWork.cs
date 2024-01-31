@@ -1,4 +1,7 @@
-﻿namespace CodeCampRestora.Application.Common.Interfaces.Repositories;
+﻿using CodeCampRestora.Application.DTOs;
+using CodeCampRestora.Application.Models;
+
+namespace CodeCampRestora.Application.Common.Interfaces.Repositories;
 
 public interface IUnitOfWork
 {

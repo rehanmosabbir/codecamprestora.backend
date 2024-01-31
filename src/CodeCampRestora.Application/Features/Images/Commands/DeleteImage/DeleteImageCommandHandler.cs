@@ -15,7 +15,7 @@ public class DeleteImageCommandHandler : ICommandHandler<DeleteImageCommand, IRe
 
     public async Task<IResult> Handle(DeleteImageCommand request, CancellationToken cancellationToken)
     {
-        var result = await _imageService.DeleteImageByIdAsync(request.Id);
+        var result = await _imageService.DeleteImageAsync($"images//{request.Id}_mosabbir.jpg");
         return result;
     }
 }

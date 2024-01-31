@@ -12,9 +12,9 @@ public class Restaurant : AuditableEntity<Guid>
     public ICollection<Category>? Categories { get; set; }
     public ICollection<Branch>? Branches { get; set; }
 
-    public static Restaurant CreateDemoRestaurant => new()
+    public static Restaurant CreateDefaultRestaurant(string? name)=> new()
     {
-        Name = "Your first restaurant.",
+        Name = string.IsNullOrEmpty(name) ? "Your first restaurant" : name,
         ImagePath = ""
     };
 }

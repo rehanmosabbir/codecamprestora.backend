@@ -1,6 +1,7 @@
 using CodeCampRestora.Application.Common.Interfaces.MediatRs;
 using CodeCampRestora.Application.Common.Interfaces.Services;
 using CodeCampRestora.Application.DTOs;
+using CodeCampRestora.Application.Features.Reviews.Queries.GetReviewById;
 using CodeCampRestora.Application.Models;
 
 namespace CodeCampRestora.Application.Features.MenuCategories.Queries
@@ -16,6 +17,11 @@ namespace CodeCampRestora.Application.Features.MenuCategories.Queries
         {
             var result = await _menuCategoryService.GetMenuCategoryByIdAsync(request.Id);
             return result;
+        }
+
+        public Task<IResult<List<ReviewDTO>>> Handle(GetReviewByIdQuery request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

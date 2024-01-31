@@ -8,6 +8,7 @@ using Mapster;
 using System.Linq.Expressions;
 using CodeCampRestora.Application.Common.Interfaces.MediatRs;
 using CodeCampRestora.Application.Models;
+using CodeCampRestora.Application.Features.Reviews.Queries.GetReviewById;
 
 namespace CodeCampRestora.Application.Features.Branches.Queries.GetById
 {
@@ -33,7 +34,13 @@ namespace CodeCampRestora.Application.Features.Branches.Queries.GetById
             if (branchEO == null) throw new ResourceNotFoundException("Branch Not found");
 
             var branchDto = branchEO.Adapt<BranchDTO>();
+            
             return Result<BranchDTO>.Success(branchDto);
+        }
+
+        public Task<IResult<List<ReviewDTO>>> Handle(GetReviewByIdQuery request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

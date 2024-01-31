@@ -22,7 +22,7 @@ public class OwnerSignupCommandHandler : ICommandHandler<OwnerSignupCommand, IRe
 
     public async Task<IResult> Handle(OwnerSignupCommand request, CancellationToken cancellationToken)
     {
-        var restaurantEO = Restaurant.CreateDemoRestaurant;
+        var restaurantEO = Restaurant.CreateDefaultRestaurant(request.RestaurantName);
         var restaurantResult = await _restaurantService.CreateRestaurantAsync(restaurantEO);
         if(!restaurantResult.IsSuccess) return restaurantResult;
 

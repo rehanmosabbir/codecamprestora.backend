@@ -13,10 +13,12 @@ namespace CodeCampRestora.Application.Features.Branches.Commands.CreateBranch;
 public class CreateBranchCommandHandler : ICommandHandler<CreateBranchCommand, IResult<BranchDTO>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IDateTimeService _dateTimeService;
 
-    public CreateBranchCommandHandler(IUnitOfWork unitOfWork)
+    public CreateBranchCommandHandler(IUnitOfWork unitOfWork,IDateTimeService dateTimeService)
     {
         _unitOfWork = unitOfWork;
+        _dateTimeService = dateTimeService;
     }
 
     public async Task<IResult<BranchDTO>> Handle(CreateBranchCommand request, CancellationToken cancellationToken)
@@ -24,6 +26,15 @@ public class CreateBranchCommandHandler : ICommandHandler<CreateBranchCommand, I
         try
         {
             var branch = request.Adapt<Branch>();
+            branch.OpeningClosingTimes = request.OpeningClosingTimes!.Select(x => new OpeningClosingTime
+            {
+                Day = x.Day,
+                OpeningHours = _dateTimeService.ConvertToTimeOnly(x.OpeningHours),
+                ClosingHours = _dateTimeService.ConvertToTimeOnly(x.ClosingHours),
+                IsClosed = x.IsClosed
+
+            }).ToList();
+            
 
             await _unitOfWork.Branches.AddAsync(branch);
             await _unitOfWork.SaveChangesAsync();

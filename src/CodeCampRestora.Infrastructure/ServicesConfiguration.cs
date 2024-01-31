@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using CodeCampRestora.Infrastructure.Data.DbContexts;
 using CodeCampRestora.Infrastructure.Identity.Models;
+using CodeCampRestora.Infrastructure.Data.Interceptors;
 
 namespace CodeCampRestora.Infrastructure;
 
@@ -52,12 +53,15 @@ public static class ServicesConfiguration
             options.TokenValidationParameters = tokenValidationParameter;
         });
 
-        var connectionStringKey = "TestConnection";
+        services.AddScoped<AuditableEntitiesInterceptor>();
+        var connectionStringKey = "ProductionConnection";
         var assemblyName = Assembly.GetExecutingAssembly().FullName;
-        services.AddDbContext<ApplicationDbContext>(options =>
+        services.AddDbContext<ApplicationDbContext>((provider, options) =>
         {
-            options.UseNpgsql(configuration.GetConnectionString(connectionStringKey),
-                b => b.MigrationsAssembly(assemblyName));
+            options
+                .UseNpgsql(configuration.GetConnectionString(connectionStringKey),
+                    b => b.MigrationsAssembly(assemblyName))
+                .AddInterceptors(provider.GetRequiredService<AuditableEntitiesInterceptor>());
         });
 
         return services;
