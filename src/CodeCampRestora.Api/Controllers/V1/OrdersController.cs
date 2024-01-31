@@ -18,7 +18,7 @@ namespace CodeCampRestora.Api.Controllers.V1
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("branch/{branchId}")]
         [SwaggerOperation(
         Summary = "Get all orders",
         Description = @"Sample Request:

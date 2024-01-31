@@ -75,7 +75,24 @@ public class MenuItemService : IMenuItemService
             pageNumber, 
             pageSize
         );
+
         var menuItemsDto = menuItemsEO.Adapt<List<MenuItemDto>>();
+
+        foreach ( var menuItem in menuItemsDto)
+        {
+            var imagePath = await _imageService.GetImageByFilePathAsync(menuItem.ImagePath);
+            
+            if (imagePath.IsSuccess)
+            {
+                menuItem.Base64Url = imagePath.Data;
+            }else
+            {
+                Result<PaginationDto<MenuItemDto>>.Failure(
+                    StatusCodes.Status500InternalServerError
+                );
+            }
+        }
+
         var response = new PaginationDto<MenuItemDto>(menuItemsDto, menuItemsEO.TotalCount, menuItemsEO.TotalPages);
         return Result<PaginationDto<MenuItemDto>>.Success(response);
     }
@@ -100,7 +117,9 @@ public class MenuItemService : IMenuItemService
         return Result.Success(StatusCodes.Status204NoContent);
     }
 
-    public async Task<IResult> UpdateMenuItemDisplayOrderAsync(List<MenuItemDto> menuItems)
+    public async Task<IResult> UpdateMenuItemDisplayOrderAsync(
+        List<MenuItemDisplayOrderDto> menuItems
+    )
     {
         var menuItemsEO = menuItems.Adapt<List<MenuItem>>();
         var result = await _unitOfWork.MenuItem.UpdateMenuItemsAsync(menuItemsEO);

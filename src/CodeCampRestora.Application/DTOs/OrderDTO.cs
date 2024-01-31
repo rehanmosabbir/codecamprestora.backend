@@ -9,6 +9,7 @@ public class OrderDTO
     {
         OrderItems = new List<OrderItemDTO>();
     }
+    public Guid Id { get; set; }
     public Guid BranchId { get; set; }
     public Guid UserId { get; set; }
     public string CustomerName { get; set; } = default!;

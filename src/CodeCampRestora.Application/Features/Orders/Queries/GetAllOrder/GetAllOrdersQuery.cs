@@ -4,7 +4,7 @@ using CodeCampRestora.Application.Common.Interfaces.MediatRs;
 
 namespace CodeCampRestora.Application.Features.Orders.Queries.GetAllOrder
 {
-    public record GetAllOrdersQuery : IQuery<IResult<List<OrderDTO>>>
+    public record GetAllOrdersQuery : IQuery<IResult<PaginationDto<OrderDTO>>>
     {
         public Guid BranchId { get; set; }
         public int PageNumber { get; set; }

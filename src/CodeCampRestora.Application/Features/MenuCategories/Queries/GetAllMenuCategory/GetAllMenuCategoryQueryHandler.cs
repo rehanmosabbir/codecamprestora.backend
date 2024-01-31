@@ -7,22 +7,19 @@ using CodeCampRestora.Application.Models;
 
 namespace CodeCampRestora.Application.Features.MenuCategories.Queries.GetAllMenuCategory
 {
-    public class GetAllMenuCategoryQueryHandler : IQueryHandler<GetAllMenuCategoryQuery, IResult<List<MenuCategoryDto>>>
+    public class GetAllMenuCategoryQueryHandler : IQueryHandler<GetAllMenuCategoryQuery, IResult<List<MenuCategoryGetAllDto>>>
     {
         private readonly IMenuCategoryService _menuCategoryService;
         public GetAllMenuCategoryQueryHandler(IMenuCategoryService menuCategoryService)
         {
             _menuCategoryService = menuCategoryService;
         }
-        public Task<IResult<List<MenuCategoryDto>>> Handle(GetAllMenuCategoryQuery request, CancellationToken cancellationToken)
+        public Task<IResult<List<MenuCategoryGetAllDto>>> Handle(
+            GetAllMenuCategoryQuery request, CancellationToken cancellationToken
+        )
         {
             var result = _menuCategoryService.GetAllMenuCategoryAsync(request.Id);
             return result;
-        }
-
-        public Task<IResult<List<ReviewDTO>>> Handle(GetReviewByIdQuery request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
     }
 }
