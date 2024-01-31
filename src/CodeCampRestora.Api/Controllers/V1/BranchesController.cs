@@ -9,6 +9,7 @@ using CodeCampRestora.Application.Features.Branches.Commands.UpdateBranch;
 using CodeCampRestora.Application.Features.Branches.Queries.GetAllBranch;
 using CodeCampRestora.Application.Features.Branches.Queries.GetByLocation;
 using CodeCampRestora.Application.Features.Branches.Commands.UpdateBranchAvailability;
+using CodeCampRestora.Application.Features.Branches.Commands.UploadBranchImage;
 
 namespace CodeCampRestora.Api.Controllers.V1;
 
@@ -105,6 +106,18 @@ public class BranchesController : ApiBaseController
     public async Task<IActionResult> UpdateavAilability([FromBody] UpdateBranchAvailabilityCommand updateIsAvailable)
     {
         var result = await Sender.Send(updateIsAvailable);
+        return result.ToActionResult();
+    }
+
+    [HttpPost("post/image")]
+    [SwaggerOperation(
+     Summary = "Upload branch Image",
+     Description = @"Sample Request:
+        Post: api/v1/ot/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
+ )]
+    public async Task<IActionResult> PostImage([FromBody] UploadBranchImageCommand newItem)
+    {
+        var result = await Sender.Send(newItem);
         return result.ToActionResult();
     }
 

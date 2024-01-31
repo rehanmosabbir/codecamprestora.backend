@@ -29,10 +29,5 @@ namespace CodeCampRestora.Application.Features.Orders.Queries.GetOrderById
             return Result<OrderDTO>.Success(bookingOrderDto);
 
         }
-
-        public Task<IResult<List<ReviewDTO>>> Handle(GetReviewByIdQuery request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -37,10 +37,5 @@ namespace CodeCampRestora.Application.Features.Branches.Queries.GetById
             
             return Result<BranchDTO>.Success(branchDto);
         }
-
-        public Task<IResult<List<ReviewDTO>>> Handle(GetReviewByIdQuery request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
