@@ -8,6 +8,7 @@ public interface IIdentityService
     Task<IResult> RegisterRestaurantOwnerAsync(RegisterUserDTO registerUserDto, Guid restaurantId);
     Task<IAuthOwnerResult> AuthenticatRestaurantOwnerAsync(LoginDTO loginDto);
     Task<IResult> RegisterMobileUserAsync(RegisterMobileUserDTO registerMobileUserDTO);
+    Task<IResult> UpdateRestaurantOwnerAsync(RestaurantOwnerUpdateDTO restaurantOwnerUpdate);
     Task<IAuthResult> AuthenticateMobileUserAsync(MobileUserLoginDto mobileUserLoginDto);
     Task<IAuthResult> RefreshTokenAsync(string accessToken, string refreshToken, CancellationToken cancellationToken);
 }

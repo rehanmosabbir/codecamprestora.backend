@@ -339,4 +339,38 @@ public class IdentityService : IIdentityService
 
         return Result.Success();
     }
+
+    public async Task<IResult> UpdateRestaurantOwnerAsync(RestaurantOwnerUpdateDTO restaurantOwnerUpdate)
+    {
+        var user = await _applicationUserManager.FindByIdAsync(restaurantOwnerUpdate.Id.ToString());
+        if (user is null)
+        {
+            return Result.Failure(
+                StatusCodes.Status403Forbidden,
+                AuthErrors.UserExists
+            );
+        }
+
+        user.FullName = restaurantOwnerUpdate.FullName;
+
+        //var newuser = new ApplicationUser
+        //{
+        //    FullName = restaurantOwnerUpdate.FullName
+        //};
+
+        var updatedName = await _applicationUserManager.UpdateAsync(user);
+
+        if(!updatedName.Succeeded)
+        {
+            return Result.Failure(StatusCodes.Status400BadRequest, AuthErrors.UserNotFound);
+        }
+
+        var updatedPassword = await _applicationUserManager.ChangePasswordAsync(user, restaurantOwnerUpdate.CurrentPassword,restaurantOwnerUpdate.NewPassword);
+        
+        if(!updatedPassword.Succeeded)
+        {
+            return Result.Failure(StatusCodes.Status400BadRequest, AuthErrors.UserNotFound);
+        }
+        return Result.Success();
+    }
 }

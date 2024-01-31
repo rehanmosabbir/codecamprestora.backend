@@ -4,6 +4,8 @@ using Swashbuckle.AspNetCore.Annotations;
 using CodeCampRestora.Application.Features.Auths.Commands.OwnerLogin;
 using CodeCampRestora.Application.Features.Auths.Commands.CreateRefreshToken;
 using CodeCampRestora.Application.Features.Auths.Commands.RestaurantOwner.Signup;
+using CodeCampRestora.Application.Features.Orders.Commands.UpdateOrder;
+using CodeCampRestora.Application.Features.Auths.Commands.OwnerUpdate;
 
 namespace CodeCampRestora.Api.Controllers.V1;
 
@@ -55,6 +57,28 @@ public class OwnerController : ApiBaseController
         OwnerLoginCommand command)
     {
         var result = await Sender.Send(command);
+        return result.ToActionResult();
+    }
+
+    [HttpPut("update")]
+    [SwaggerOperation(
+        Summary = "Update existing user",
+        Description = @"Sample Request:
+        Post: api/v1/owners/updateUser
+        {
+            ""username"": ""Muhit"",
+            ""CurrentPassoword"": ""Aa123456."",
+            ""NewPassoword"": ""Aa1234567.""
+        }"
+    )]
+    [SwaggerResponse(StatusCodes.Status200OK, "Request Success", typeof(IAuthOwnerResult))]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "User not found", typeof(IAuthOwnerResult))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Request validation failed", typeof(IAuthOwnerResult))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, "Wrong user credentials", typeof(IAuthOwnerResult))]
+    public async Task<IActionResult> Update([FromBody] UpdateOwnerCommand command)
+    {
+        var result = await Sender.Send(command);
+        if(result.IsSuccess) return Ok(result);
         return result.ToActionResult();
     }
 
