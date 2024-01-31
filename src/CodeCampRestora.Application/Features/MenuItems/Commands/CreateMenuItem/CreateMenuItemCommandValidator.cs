@@ -16,7 +16,7 @@ namespace CodeCampRestora.Application.Features.MenuItems.Commands.CreateMenuItem
             RuleFor(item => item.Image.Type)
             .NotEmpty().WithMessage("Image type is required!")
             .NotNull().WithMessage("Image type can not be null!");
-            RuleFor(item => item.Image.Base64)
+            RuleFor(item => item.Image)
             .NotEmpty().WithMessage("Base64 is required!");
         }
     }

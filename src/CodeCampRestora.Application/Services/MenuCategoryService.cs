@@ -22,23 +22,16 @@ public class MenuCategoryService : IMenuCategoryService
     }
     public async Task<IResult<Guid>> CreateCategoryAsync(CreateMenuCategoryCommand menuCategoryDto)
     {
-        // var imageEO = menuCategoryDto.Image.Adapt<Image>();
-        // var result = await _imageService.UploadImageAsync(imageEO);
-
         var menuCategory = menuCategoryDto.Adapt<MenuCategory>();
-        menuCategory.ImagePath = menuCategoryDto.Image.Name;
         
-        await _unitOfWork.MenuCategory.AddAsync(menuCategory);
-        await _unitOfWork.SaveChangesAsync();
+        var uploadedImage = await _imageService.UploadImageAsync(menuCategoryDto.Image);
 
-        // if(result.IsSuccess)
-        // {
-        //     var imageId = result.Data;
-            
-        //     menuCategory.ImageId = imageId;
-        //     await _unitOfWork.MenuCategory.AddAsync(menuCategory);
-        //     await _unitOfWork.SaveChangesAsync();
-        // }
+        if(uploadedImage.IsSuccess)
+        {
+            menuCategory.ImagePath = uploadedImage.Data;
+            await _unitOfWork.MenuCategory.AddAsync(menuCategory);
+            await _unitOfWork.SaveChangesAsync();
+        }
 
         return Result<Guid>.Success(menuCategory.Id);
     }
@@ -93,6 +86,11 @@ public class MenuCategoryService : IMenuCategoryService
             pageSize
         );
         var menuCategoriesDto = menuCategoriesEO.Adapt<List<MenuCategoryDto>>();
+        foreach ( var menuCategory in menuCategoriesEO)
+        {
+            var imagePath = await _imageService.GetImageByFilePathAsync(menuCategory.ImagePath);
+            menuCategory.ImagePath = imagePath.Data;
+        }
         var response = new PaginationDto<MenuCategoryDto>(menuCategoriesDto, menuCategoriesEO.TotalCount, menuCategoriesEO.TotalPages);
         return Result<PaginationDto<MenuCategoryDto>>.Success(response);
     }
@@ -127,12 +125,4 @@ public class MenuCategoryService : IMenuCategoryService
         }
         return result;
     }
-
-    // public async Task<IResult<PaginationDto<MenuCategory>>> GetPaginatedMenuCategoryAsync(int pageNumber, int pageSize)
-    // {
-    //     var menuCategoriesEO = await _unitOfWork.MenuCategory.GetPaginatedAsync(pageNumber, pageSize);
-    //     var response= new PaginationDto<MenuCategory>(menuCategoriesEO, menuCategoriesEO.TotalCount, menuCategoriesEO.TotalPages);
-    //     return Result<PaginationDto<MenuCategory>>.Success(response);
-    // }
-
 }

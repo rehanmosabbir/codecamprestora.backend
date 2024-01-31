@@ -8,6 +8,7 @@ using CodeCampRestora.Application.Features.Branches.Commands.DeleteBranch;
 using CodeCampRestora.Application.Features.Branches.Commands.UpdateBranch;
 using CodeCampRestora.Application.Features.Branches.Queries.GetAllBranch;
 using CodeCampRestora.Application.Features.Branches.Queries.GetByLocation;
+using CodeCampRestora.Application.Features.Branches.Commands.UpdateBranchAvailability;
 
 namespace CodeCampRestora.Api.Controllers.V1;
 
@@ -31,9 +32,9 @@ public class BranchesController : ApiBaseController
     )]
     [SwaggerResponse(StatusCodes.Status200OK, "Request Success", typeof(IResult))]
     [SwaggerResponse(StatusCodes.Status404NotFound, "Branch not found", typeof(IResult))]
-    public async Task<IActionResult> GetAll(Guid resturantId,int pageNumber, int pageSize)
+    public async Task<IActionResult> GetAll(Guid resturantId, int pageNumber, int pageSize)
     {
-        var result = await Sender.Send(new GetAllBranchesQuery(resturantId, pageNumber,pageSize));
+        var result = await Sender.Send(new GetAllBranchesQuery(resturantId, pageNumber, pageSize));
         return result.ToActionResult();
     }
 
@@ -92,7 +93,18 @@ public class BranchesController : ApiBaseController
     )]
     public async Task<IActionResult> GetAll(double Latitude, double Longitude)
     {
-        var result = await Sender.Send(new GetByLocationQuery(Latitude,Longitude));
+        var result = await Sender.Send(new GetByLocationQuery(Latitude, Longitude));
+        return result.ToActionResult();
+    }
+    [HttpPatch]
+    [SwaggerOperation(
+        Summary = "Update IsAvailable of a branch",
+        Description = @"Sample Request:
+        GetAll: api/v1/branch/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
+    )]
+    public async Task<IActionResult> UpdateavAilability([FromBody] UpdateBranchAvailabilityCommand updateIsAvailable)
+    {
+        var result = await Sender.Send(updateIsAvailable);
         return result.ToActionResult();
     }
 

@@ -23,23 +23,15 @@ public class MenuItemService : IMenuItemService
     }
     public async Task<IResult<Guid>> CreateItemAsync(CreateMenuItemCommand menuItemDto)
     {
-        // var imageEO = menuItemDto.Image.Adapt<Image>();
-        // var result = await _imageService.UploadImageAsync(imageEO);
-
         var menuItem = menuItemDto.Adapt<MenuItem>();
-        menuItem.ImagePath = menuItemDto.Image.Name;
+        var uploadedImage = await _imageService.UploadImageAsync(menuItemDto.Image);
         
-        await _unitOfWork.MenuItem.AddAsync(menuItem);
-        await _unitOfWork.SaveChangesAsync();
-
-        // if(result.IsSuccess)
-        // {
-        //     var imageId = result.Data;
-            
-        //     menuItem.ImageId = imageId;
-        //     await _unitOfWork.MenuItem.AddAsync(menuItem);
-        //     await _unitOfWork.SaveChangesAsync();
-        // }
+        if (uploadedImage.IsSuccess)
+        {
+            menuItem.ImagePath = uploadedImage.Data;
+            await _unitOfWork.MenuItem.AddAsync(menuItem);
+            await _unitOfWork.SaveChangesAsync();
+        }      
         return Result<Guid>.Success(menuItem.Id);
     }
 
