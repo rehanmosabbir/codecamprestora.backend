@@ -101,7 +101,7 @@ namespace CodeCampRestora.Api.Controllers.V1
         )]
         [SwaggerResponse(StatusCodes.Status200OK, "Request Success", typeof(IResult))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Menu item not found", typeof(IResult))]
-        public async Task<IActionResult> Update(List<MenuItemDto> menuItems)
+        public async Task<IActionResult> Update(List<MenuItemDisplayOrderDto> menuItems)
         {
             var result = await Sender.Send(new UpdateMenuItemDisplayOrderCommnad(menuItems));
             return result.ToActionResult();

@@ -9,8 +9,15 @@ namespace CodeCampRestora.Application.DTOs
         public double Price { get; set; }
         public bool? Availability { get; set; }
         public int? DisplayOrder { get; set; }
-        public Guid ImageId { get; set; }
+        public string ImagePath { get; set; }
+        public string Base64Url { get; set; }
         public Guid CategoryId { get; set; }
         public Guid BranchId { get; set; }
+    }
+
+    public class MenuItemDisplayOrderDto
+    {
+        public Guid Id { get; set; }
+        public int DisplayOrder { get; set; }
     }
 }
