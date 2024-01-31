@@ -12,7 +12,7 @@ namespace CodeCampRestora.Application.Common.Interfaces.Services
         Task<IResult> DeleteItemAsync(Guid Id);
         Task<IResult<List<MenuItemDto>>> GetAllMenuItemsAsync(Guid id);
         Task<IResult<PaginationDto<MenuItemDto>>> GetPaginatedAsync(Guid Id, int pageNumber, int pageSize);
-        Task<IResult> UpdateMenuItemDisplayOrderAsync(List<MenuItemDto> menuItems);
+        Task<IResult> UpdateMenuItemDisplayOrderAsync(List<MenuItemDisplayOrderDto> menuItems);
         Task<IResult> UpdateMenuItemAsync(UpdateMenuItemCommand request);
     }
 }
