@@ -20,9 +20,9 @@ public class ApplicationUserManagerAdapter : IApplicationUserManagerAdapter
         return await _applicationUserManager.FindByEmailAsync(email);
     }
 
-    public async Task<ApplicationUser?> FindByIdAsync(string email)
+    public async Task<ApplicationUser?> FindByIdAsync(string id)
     {
-        return await _applicationUserManager.FindByIdAsync(email);
+        return await _applicationUserManager.FindByIdAsync(id);
     }
 
     public async Task<ApplicationUser?> FindByNameAsync(string userName)
@@ -48,5 +48,15 @@ public class ApplicationUserManagerAdapter : IApplicationUserManagerAdapter
     public async Task<IList<string>> GetRolesAsync(ApplicationUser user)
     {
         return await _applicationUserManager.GetRolesAsync(user);
+    }
+
+    public async Task<IdentityResult> UpdateAsync(ApplicationUser user)
+    {
+        return await _applicationUserManager.UpdateAsync(user);
+    }
+
+    public async Task<IdentityResult> ChangePasswordAsync(ApplicationUser user, string currentPassword, string newPassword)
+    {
+        return await _applicationUserManager.ChangePasswordAsync(user, currentPassword, newPassword);
     }
 }

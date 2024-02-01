@@ -12,4 +12,6 @@ public interface IApplicationUserManager
     Task<IdentityResult> CreateAsync(ApplicationUser user, string password);
     Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string role);
     Task<IList<string>> GetRolesAsync(ApplicationUser user);
+    Task<IdentityResult> UpdateAsync(ApplicationUser user);
+    Task<IdentityResult> ChangePasswordAsync(ApplicationUser user, string currentPassword, string newPassword);
 }

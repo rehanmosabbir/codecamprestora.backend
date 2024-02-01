@@ -51,8 +51,4 @@ public class GetByLocationQueryHandler : IQueryHandler<GetByLocationQuery, IResu
 
     }
 
-    public Task<IResult<List<ReviewDTO>>> Handle(GetReviewByIdQuery request, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
 }

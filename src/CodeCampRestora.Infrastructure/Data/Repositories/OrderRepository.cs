@@ -1,4 +1,5 @@
 ﻿using CodeCampRestora.Application.Attributes;
+using CodeCampRestora.Application.Common.Helpers.Pagination;
 using CodeCampRestora.Application.Common.Interfaces.DbContexts;
 using CodeCampRestora.Application.Common.Interfaces.Repositories;
 using CodeCampRestora.Domain.Entities.Branches;
@@ -25,7 +26,7 @@ namespace CodeCampRestora.Infrastructure.Data.Repositories
             _orderDbSet = _dbContext.Set<Order>();
         }
 
-        public async Task<IList<Order>> GetOrdersByBranchId(
+        public async Task<PagedList<Order>> GetOrdersByBranchId(
             Guid branchId,
             string includeProperties = "",
             int pageIndex = 1,
@@ -45,11 +46,15 @@ namespace CodeCampRestora.Infrastructure.Data.Repositories
                 query = query.Include(includeProperty);
             }
 
-            var result = query.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            // var result = query.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            var result = await PagedList<Order>.ToPagedListAsync(query, pageIndex, pageSize,
+                queryorderby => queryorderby.OrderBy(branch => branch.CreatedBy)
+                );
 
-
-            var orderList = await result.ToListAsync();
+            var orderList = result;
             return orderList;
         }
+
+        
     }
 }

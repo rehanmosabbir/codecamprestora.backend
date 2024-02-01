@@ -53,7 +53,7 @@ public class ImageService : IImageService
 
                 foreach (string imagePath in imageFiles)
                 {
-                    string newImagePath = imagePath.Replace("\\", "//");
+                    string newImagePath = imagePath.Replace("\\", "/");
                     if (newImageName == newImagePath)
                     {
                         byte[] imageData = await File.ReadAllBytesAsync(imagePath);
@@ -83,7 +83,7 @@ public class ImageService : IImageService
 
             foreach (string imagePath in imageFiles)
             {
-                string newImagePath = imagePath.Replace("\\", "//");
+                string newImagePath = imagePath.Replace("\\", "/");
                 if (newImageName == newImagePath)
                 {
                     byte[] imageData = await File.ReadAllBytesAsync(imagePath);

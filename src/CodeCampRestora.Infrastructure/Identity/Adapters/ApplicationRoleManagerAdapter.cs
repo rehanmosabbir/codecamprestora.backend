@@ -1,6 +1,8 @@
 using CodeCampRestora.Application.Attributes;
+using CodeCampRestora.Domain.Identity;
 using CodeCampRestora.Infrastructure.Identity.Interfaces;
 using CodeCampRestora.Infrastructure.Identity.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace CodeCampRestora.Infrastructure.Identity.Adapters;
 

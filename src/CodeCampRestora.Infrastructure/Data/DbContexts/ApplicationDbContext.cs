@@ -21,13 +21,9 @@ public class ApplicationDbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(builder);
+        builder.Entity<Staff>().ToTable("Staffs");
 
-        builder.Entity<ApplicationUser>()
-            .HasOne(u => u.Staff)
-            .WithOne(t => t.ApplicationUser)
-            .HasForeignKey<Staff>(b => b.ApplicationUserId)
-            .IsRequired(false);
+        base.OnModelCreating(builder);
 
         SeedRoles(builder);
     }
@@ -36,11 +32,11 @@ public class ApplicationDbContext
     {
         builder.Entity<ApplicationRole>().HasData
         (
-            new ApplicationRole { Id = Guid.NewGuid(), Name = "User", ConcurrencyStamp = "1", NormalizedName = "USER" },
-            new ApplicationRole { Id = Guid.NewGuid(), Name = "Owner", ConcurrencyStamp = "2", NormalizedName = "OWNER" },
-            new ApplicationRole { Id = Guid.NewGuid(), Name = "Manager", ConcurrencyStamp = "3", NormalizedName = "MANAGER" },
-            new ApplicationRole { Id = Guid.NewGuid(), Name = "Waiter", ConcurrencyStamp = "4", NormalizedName = "WAITER" },
-            new ApplicationRole { Id = Guid.NewGuid(), Name = "KitchenStuff", ConcurrencyStamp = "5", NormalizedName = "KITCHENSTUFF" }
+            new ApplicationRole { Id = new Guid("8b6e10d4-1c75-4c0b-9417-a55c2241bcb2"), Name = "User", ConcurrencyStamp = "1", NormalizedName = "USER" },
+            new ApplicationRole { Id = new Guid("ac12af63-15b6-48ea-b132-c9f27e15df90"), Name = "Owner", ConcurrencyStamp = "2", NormalizedName = "OWNER" },
+            new ApplicationRole { Id = new Guid("e0b4d5f8-7340-4c6e-9d66-58e120a9298f"), Name = "Manager", ConcurrencyStamp = "3", NormalizedName = "MANAGER" },
+            new ApplicationRole { Id = new Guid("a5e34882-8d8b-49f9-bc47-5ca81c3759c9"), Name = "Waiter", ConcurrencyStamp = "4", NormalizedName = "WAITER" },
+            new ApplicationRole { Id = new Guid("74c34278-22b3-452e-9e04-7d596f4fcbef"), Name = "KitchenStuff", ConcurrencyStamp = "5", NormalizedName = "KITCHENSTUFF" }
         );
     }
 

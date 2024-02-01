@@ -7,6 +7,5 @@ public record UpdateMenuCategoryCommand(
     Guid Id,
     string Name,
     int DisplayOrder,
-    ImageRequestDto? Image,
     Guid? RestaurantId 
 ) : ICommand<IResult>;

@@ -6,8 +6,8 @@ namespace CodeCampRestora.Application.Features.MenuItems.Commands.PutDisplayOrde
 
 public record UpdateMenuItemDisplayOrderCommnad : ICommand<IResult>
 {
-    public List<MenuItemDto> MenuItems { get; set; }
-    public UpdateMenuItemDisplayOrderCommnad(List<MenuItemDto> menuItems)
+    public List<MenuItemDisplayOrderDto> MenuItems { get; set; }
+    public UpdateMenuItemDisplayOrderCommnad(List<MenuItemDisplayOrderDto> menuItems)
     {
         MenuItems = menuItems;
     }

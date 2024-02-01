@@ -51,3 +51,8 @@ public class BranchListDTO
     public PriceRange? PriceRange { get; set; }
 
 }
+public class BranchImage
+{
+    public string? ImagePath { get; set; }
+    public int DisplayOrder { get; set; }
+}

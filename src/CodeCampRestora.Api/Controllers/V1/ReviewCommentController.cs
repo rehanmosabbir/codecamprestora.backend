@@ -9,16 +9,16 @@ namespace CodeCampRestora.Api.Controllers.V1;
 public class ReviewCommentController : ApiBaseController
 {
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateReviewCommentCommand command)
+    public async Task<IResult> Create([FromBody] CreateReviewCommentCommand command)
     {
         var result = await Sender.Send(command);
-        return result.ToActionResult();
+        return result;
     }
 
     [HttpPatch]
-    public async Task<IActionResult> CommentHide([FromBody] CommentHideCommand command)
+    public async Task<IResult> CommentHide([FromBody] CommentHideCommand command)
     {
         var result = await Sender.Send(command);
-        return result.ToActionResult();
+        return result;
     }
 }
