@@ -10,6 +10,7 @@ using CodeCampRestora.Application.Features.Branches.Queries.GetAllBranch;
 using CodeCampRestora.Application.Features.Branches.Queries.GetByLocation;
 using CodeCampRestora.Application.Features.Branches.Commands.UpdateBranchAvailability;
 using CodeCampRestora.Application.Features.Branches.Commands.UploadBranchImage;
+using CodeCampRestora.Application.Features.Branches.Queries.GetAllBranchImageById;
 
 namespace CodeCampRestora.Api.Controllers.V1;
 
@@ -118,6 +119,17 @@ public class BranchesController : ApiBaseController
     public async Task<IActionResult> PostImage([FromBody] UploadBranchImageCommand newItem)
     {
         var result = await Sender.Send(newItem);
+        return result.ToActionResult();
+    }
+    [HttpGet("branch/{id}")]
+    [SwaggerOperation(
+      Summary = "Get all branch image by ID",
+      Description = @"Sample Request:
+        Get: api/v1/branch/3d8cd15b-6414-4bbc-92f7-5d6e9d3e5c9c"
+  )]
+    public async Task<IActionResult> GetAllImage(Guid id)
+    {
+        var result = await Sender.Send(new GetAllBranchImageQuery(id));
         return result.ToActionResult();
     }
 
