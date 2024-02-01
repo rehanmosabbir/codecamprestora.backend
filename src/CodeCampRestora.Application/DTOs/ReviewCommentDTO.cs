@@ -1,7 +1,8 @@
-﻿namespace CodeCampRestora.Application.DTOs
+﻿namespace CodeCampRestora.Application.DTOs;
+
+public class ReviewCommentDTO
 {
-    public class ReviewCommentDTO
-    {
-        public string CommentText { get; set; } = default!;
-    }
+    public Guid Id { get; set; }
+    public string CommentText { get; set; } = default!;
+    public bool IsCommentHidden { get; set; } = false;
 }
