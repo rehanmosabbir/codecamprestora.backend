@@ -542,29 +542,6 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                     b.ToTable("ReviewComments");
                 });
 
-            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Staff", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ApplicationUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("RestaurantId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId")
-                        .IsUnique();
-
-                    b.ToTable("Staffs");
-                });
-
             modelBuilder.Entity("CodeCampRestora.Domain.Identity.ApplicationUser", b =>
                 {
                     b.Property<Guid>("Id")
@@ -618,9 +595,6 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("StaffId")
-                        .HasColumnType("uuid");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
 
@@ -641,6 +615,8 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("CodeCampRestora.Domain.Identity.RefreshToken", b =>
@@ -765,35 +741,35 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d89f9d47-41dc-47be-9453-fdd3d5594b5d"),
+                            Id = new Guid("8b6e10d4-1c75-4c0b-9417-a55c2241bcb2"),
                             ConcurrencyStamp = "1",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = new Guid("262677a9-ac59-427f-8ba5-226a0b280ead"),
+                            Id = new Guid("ac12af63-15b6-48ea-b132-c9f27e15df90"),
                             ConcurrencyStamp = "2",
                             Name = "Owner",
                             NormalizedName = "OWNER"
                         },
                         new
                         {
-                            Id = new Guid("65babfbe-cf5b-49a0-b043-a99be48b0eb1"),
+                            Id = new Guid("e0b4d5f8-7340-4c6e-9d66-58e120a9298f"),
                             ConcurrencyStamp = "3",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = new Guid("c5f0c44d-9e19-48f0-8884-9613836339ba"),
+                            Id = new Guid("a5e34882-8d8b-49f9-bc47-5ca81c3759c9"),
                             ConcurrencyStamp = "4",
                             Name = "Waiter",
                             NormalizedName = "WAITER"
                         },
                         new
                         {
-                            Id = new Guid("2ebe99ae-9e84-46d7-9e7b-6ad0dd9dbb32"),
+                            Id = new Guid("74c34278-22b3-452e-9e04-7d596f4fcbef"),
                             ConcurrencyStamp = "5",
                             Name = "KitchenStuff",
                             NormalizedName = "KITCHENSTUFF"
@@ -903,6 +879,16 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Staff", b =>
+                {
+                    b.HasBaseType("CodeCampRestora.Domain.Identity.ApplicationUser");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uuid");
+
+                    b.ToTable("Staffs", (string)null);
+                });
+
             modelBuilder.Entity("CodeCampRestora.Domain.Entities.Branches.Address", b =>
                 {
                     b.HasOne("CodeCampRestora.Domain.Entities.Branches.Branch", "Branch")
@@ -992,7 +978,7 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
             modelBuilder.Entity("CodeCampRestora.Domain.Entities.Review", b =>
                 {
                     b.HasOne("CodeCampRestora.Domain.Entities.Branches.Branch", "Branch")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("BranchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1009,15 +995,6 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Review");
-                });
-
-            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Staff", b =>
-                {
-                    b.HasOne("CodeCampRestora.Domain.Identity.ApplicationUser", "ApplicationUser")
-                        .WithOne("Staff")
-                        .HasForeignKey("CodeCampRestora.Domain.Entities.Staff", "ApplicationUserId");
-
-                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("CodeCampRestora.Domain.Identity.ApplicationUser", b =>
@@ -1089,6 +1066,15 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Staff", b =>
+                {
+                    b.HasOne("CodeCampRestora.Domain.Identity.ApplicationUser", null)
+                        .WithOne()
+                        .HasForeignKey("CodeCampRestora.Domain.Entities.Staff", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CodeCampRestora.Domain.Entities.Branches.Branch", b =>
                 {
                     b.Navigation("Address");
@@ -1098,6 +1084,8 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("OpeningClosingTimes");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("CodeCampRestora.Domain.Entities.Orders.Order", b =>
@@ -1108,11 +1096,6 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
             modelBuilder.Entity("CodeCampRestora.Domain.Entities.Review", b =>
                 {
                     b.Navigation("ReviewComments");
-                });
-
-            modelBuilder.Entity("CodeCampRestora.Domain.Identity.ApplicationUser", b =>
-                {
-                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("CodeCampRestora.Infrastructure.Entities.Restaurant", b =>

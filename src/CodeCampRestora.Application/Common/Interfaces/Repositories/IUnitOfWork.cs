@@ -13,5 +13,6 @@ public interface IUnitOfWork
     IMenuCategoryRepository MenuCategory { get; }
     IReviewCommentRepository Comments { get; }
     IReviewRepository Reviews { get; }
+    public IStaffRepository Staffs { get; }
     Task SaveChangesAsync();
 }

@@ -17,6 +17,7 @@ public class UnitOfWork : IUnitOfWork
     public IReviewCommentRepository Comments { get; }
     public IMenuCategoryRepository MenuCategory { get; }
     public IReviewRepository Reviews { get; }
+    public IStaffRepository Staffs { get; }
 
     private readonly IApplicationDbContext _appplicationDbContext;
 
@@ -31,6 +32,7 @@ public class UnitOfWork : IUnitOfWork
         IMenuCategoryRepository menuCategory,
         IReviewCommentRepository reviewComment,
         IReviewRepository review,
+        IStaffRepository staffs,
         IApplicationDbContext applicationDbContext)
     {
         _appplicationDbContext = applicationDbContext;
@@ -42,6 +44,7 @@ public class UnitOfWork : IUnitOfWork
         Restaurants = restaurants;
         MenuCategory = menuCategory;
         Reviews = review;
+        Staffs = staffs;
     }
 
     public void CreateTransaction()

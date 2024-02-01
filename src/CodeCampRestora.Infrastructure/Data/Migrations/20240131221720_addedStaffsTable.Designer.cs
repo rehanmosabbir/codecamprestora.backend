@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CodeCampRestora.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240122062307_addedOrderTables")]
-    partial class addedOrderTables
+    [Migration("20240131221720_addedStaffsTable")]
+    partial class addedStaffsTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,11 +91,11 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsAvailable")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("ImagePath")
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp with time zone");
@@ -119,6 +119,42 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                     b.HasIndex("RestaurantId");
 
                     b.ToTable("Branches");
+                });
+
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Branches.BranchImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.ToTable("BranchImage");
                 });
 
             modelBuilder.Entity("CodeCampRestora.Domain.Entities.Branches.CuisineType", b =>
@@ -582,6 +618,8 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("CodeCampRestora.Domain.Identity.RefreshToken", b =>
@@ -844,6 +882,16 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Staff", b =>
+                {
+                    b.HasBaseType("CodeCampRestora.Domain.Identity.ApplicationUser");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uuid");
+
+                    b.ToTable("Staffs", (string)null);
+                });
+
             modelBuilder.Entity("CodeCampRestora.Domain.Entities.Branches.Address", b =>
                 {
                     b.HasOne("CodeCampRestora.Domain.Entities.Branches.Branch", "Branch")
@@ -860,6 +908,15 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                     b.HasOne("CodeCampRestora.Infrastructure.Entities.Restaurant", null)
                         .WithMany("Branches")
                         .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Branches.BranchImage", b =>
+                {
+                    b.HasOne("CodeCampRestora.Domain.Entities.Branches.Branch", null)
+                        .WithMany("Images")
+                        .HasForeignKey("BranchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -924,7 +981,7 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
             modelBuilder.Entity("CodeCampRestora.Domain.Entities.Review", b =>
                 {
                     b.HasOne("CodeCampRestora.Domain.Entities.Branches.Branch", "Branch")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("BranchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1012,13 +1069,26 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("CodeCampRestora.Domain.Entities.Staff", b =>
+                {
+                    b.HasOne("CodeCampRestora.Domain.Identity.ApplicationUser", null)
+                        .WithOne()
+                        .HasForeignKey("CodeCampRestora.Domain.Entities.Staff", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CodeCampRestora.Domain.Entities.Branches.Branch", b =>
                 {
                     b.Navigation("Address");
 
                     b.Navigation("CuisineTypes");
 
+                    b.Navigation("Images");
+
                     b.Navigation("OpeningClosingTimes");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("CodeCampRestora.Domain.Entities.Orders.Order", b =>

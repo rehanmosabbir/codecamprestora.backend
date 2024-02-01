@@ -34,7 +34,6 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     FullName = table.Column<string>(type: "text", nullable: false),
-                    StaffId = table.Column<Guid>(type: "uuid", nullable: false),
                     RestaurantId = table.Column<Guid>(type: "uuid", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -183,25 +182,6 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Staffs",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    BranchId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RestaurantId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ApplicationUserId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Staffs", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Staffs_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
@@ -267,12 +247,6 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Staffs_ApplicationUserId",
-                table: "Staffs",
-                column: "ApplicationUserId",
-                unique: true);
-
             migrationBuilder.AddForeignKey(
                 name: "FK_MenuItems_Branches_BranchId",
                 table: "MenuItems",
@@ -318,9 +292,6 @@ namespace CodeCampRestora.Infrastructure.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");
-
-            migrationBuilder.DropTable(
-                name: "Staffs");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
